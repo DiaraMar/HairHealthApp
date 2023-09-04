@@ -1,6 +1,6 @@
 package com.kamikarow.hairCareProject.config;
 
-import com.kamikarow.hairCareProject.user.UserRepository;
+import com.kamikarow.hairCareProject.infra.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,14 +13,20 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * This class hold all the application configurations
+ * @Configuration forced Spring at every start up of the application to pick up configurations and implements all beans within the classes
+ * N.B. Beans are always public methods
+ * @RequiredArgsConstructor to inject final variables stated
+ */
+
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    private final UserRepository userJPARepository;
+    private final UserJpaRepository userJPARepository;
 
     /**
      * Get user from database
-     *
      * @return UserDetailsService
      */
     @Bean

@@ -1,4 +1,4 @@
-package com.kamikarow.hairCareProject.user;
+package com.kamikarow.hairCareProject.domain.user;
 
 
 import jakarta.persistence.*;

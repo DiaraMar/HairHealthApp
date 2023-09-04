@@ -46,6 +46,8 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/api/v1/me/**").permitAll()
+                .requestMatchers("/api/v1/demo-controller/**").permitAll()//todo : fix authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

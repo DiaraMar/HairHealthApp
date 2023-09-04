@@ -1,4 +1,4 @@
-package com.kamikarow.hairCareProject.controller;
+package com.kamikarow.hairCareProject.exposition.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

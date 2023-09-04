@@ -17,6 +17,13 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * This class is guard rail that take advantage of OncePerRequestFilter capacities offered by Spring
+ * Activated everytime user send a request and handle it (whatever it can be).
+ *
+ * @Component used to make the class available as a managed been for spring
+ * @RequiredArgsConstructor create constructor using all final private fields stated
+ */
 
 @Component
 @RequiredArgsConstructor

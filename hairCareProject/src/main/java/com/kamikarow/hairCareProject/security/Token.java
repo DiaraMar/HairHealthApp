@@ -1,5 +1,5 @@
 package com.kamikarow.hairCareProject.security;
-import com.kamikarow.hairCareProject.user.User;
+import com.kamikarow.hairCareProject.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

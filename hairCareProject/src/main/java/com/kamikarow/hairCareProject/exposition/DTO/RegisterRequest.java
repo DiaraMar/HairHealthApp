@@ -1,6 +1,6 @@
-package com.kamikarow.hairCareProject.controller;
+package com.kamikarow.hairCareProject.exposition.DTO;
 
-import com.kamikarow.hairCareProject.user.User;
+import com.kamikarow.hairCareProject.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

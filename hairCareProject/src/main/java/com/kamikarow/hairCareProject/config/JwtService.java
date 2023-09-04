@@ -23,7 +23,7 @@ public class JwtService {
     /**
      * Secret_key is used to code or decode the
      * Base.64 is the common level of security needed.
-     * Base.64 is hyper sensible to specials characters and can leads to errors.
+     * Base.64 is hyper sensible to specials characters wich can leads to errors.
      * If bit doesn't meet bit requirement it can also lead to errors
      */
     static Properties properties = new Properties();
