@@ -1,4 +1,4 @@
-package com.kamikarow.hairCareProject.config;
+package com.kamikarow.hairCareProject.service;
 import com.kamikarow.hairCareProject.security.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

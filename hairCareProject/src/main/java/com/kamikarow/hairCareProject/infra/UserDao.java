@@ -16,7 +16,6 @@ public class UserDao {
     }
 
     public User save(User user){
-        System.out.println(user);
       return userJpaRepository.save(user);
     }
 
