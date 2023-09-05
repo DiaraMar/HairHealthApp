@@ -19,6 +19,7 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue/** DefaultValue (strategy = GenerationType.AUTO)**/
+    @Column(name = "id")
     private Integer id;
     private String firstname;
     private String lastname;
@@ -27,6 +28,10 @@ public class User implements UserDetails {
     private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+   /* @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private AccountCustomization accountCustomization;*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -90,4 +95,6 @@ public class User implements UserDetails {
     public void setRole(Role role) {
         this.role = role;
     }
+
+
 }

@@ -33,7 +33,7 @@ public class AuthenticationService implements UserInterface {
             throw new EmailAlreadyExistsException("Username already in database");
         }
 
-        var user = new ResetPasswordRequest().toUser(registerRequest, passwordEncoder.encode(registerRequest.getPassword()));
+        var user = new RegisterRequest().toUser(registerRequest, passwordEncoder.encode(registerRequest.getPassword()));
         user = userDao.save(user);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().token(jwtToken).build();

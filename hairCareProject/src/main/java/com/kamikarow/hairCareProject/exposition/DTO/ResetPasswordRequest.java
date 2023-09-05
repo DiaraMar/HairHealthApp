@@ -20,27 +20,18 @@ public class ResetPasswordRequest {
 
 
     public User toUser(Optional<User> optionalUser, String newPasswordEncoded, String emailFromToken){
+        var user = optionalUser.get();
         return User.builder()
-                .id(optionalUser.get().getId())
-                .firstname(optionalUser.get().getFirstname())
-                .lastname(optionalUser.get().getLastname())
+                .id(user.getId())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
                 .password(newPasswordEncoded)
                 .email(emailFromToken)
-                .phoneNumber(optionalUser.get().getPhoneNumber())
-                .role(optionalUser.get().getRole())
+                .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole())
                 .build();
     }
 
-    public User toUser(RegisterRequest registerRequest, String passwordEncoded){
-        return   User.builder()
-                .firstname(registerRequest.getFirstname())
-                .lastname(registerRequest.getLastname())
-                .email(registerRequest.getEmail())
-                .password(passwordEncoded)
-                .phoneNumber(registerRequest.getPhoneNumber())
-                .role(Role.USER)
-                .build();
-    }
 
 
 }
