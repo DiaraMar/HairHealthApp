@@ -2,7 +2,7 @@ package com.kamikarow.hairCareProject.service;
 
 import com.kamikarow.hairCareProject.config.JwtService;
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
-import com.kamikarow.hairCareProject.domain.user.UserInterface;
+import com.kamikarow.hairCareProject.domain.AuthInterface;
 import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationResponse;
 import com.kamikarow.hairCareProject.exposition.DTO.RegisterRequest;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService implements UserInterface {
+public class AuthenticationService implements AuthInterface {
 
     private final UserDao userDao;
     private final AccountCustomizationDao accountCustomizationDao;
