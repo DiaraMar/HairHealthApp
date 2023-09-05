@@ -33,21 +33,22 @@ public class AuthenticationService implements UserInterface {
             throw new EmailAlreadyExistsException("Username already in database");
         }
 
-        var user = new RegisterRequest().toUser(registerRequest, passwordEncoder.encode(registerRequest.getPassword()));
+        var user = new RegisterRequest().toUser(registerRequest, encodePassword(registerRequest.getPassword()));
         user = userDao.save(user);
 
         var accountCustomization = new AccountCustomization(user);
         accountCustomizationDao.save(accountCustomization);
 
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        var jwtToken = generateToken(user);
+        return buildToken(jwtToken);
     }
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
         var user = userDao.findByEmail(authenticationRequest.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+
+        var jwtToken = generateToken(user);
+        return buildToken(jwtToken);
     }
 
     public AuthenticationResponse resetPassword(ResetPasswordRequest resetPasswordRequest, String token) {
@@ -55,7 +56,7 @@ public class AuthenticationService implements UserInterface {
         if(token == null || token.isEmpty() || resetPasswordRequest.getOldPassword()==null || resetPasswordRequest.getOldPassword().isEmpty() || resetPasswordRequest.getNewPassword()==null  || resetPasswordRequest.getNewPassword().isEmpty()){
             throw new Unauthorized("Request unauthorized");
         }
-        String email = getEmail(token);
+        String email = extractEmail(token);
 
         if(resetPasswordRequest.getEmail()!=null && !resetPasswordRequest.getEmail().isEmpty()){
             if(!resetPasswordRequest.getEmail().equalsIgnoreCase(email)){
@@ -67,15 +68,28 @@ public class AuthenticationService implements UserInterface {
         }
 
 
-        User user = new ResetPasswordRequest().toUser(userDao.findByEmail(email), passwordEncoder.encode(resetPasswordRequest.getNewPassword()), email);
+        User user = new ResetPasswordRequest().toUser(userDao.findByEmail(email), encodePassword(resetPasswordRequest.getNewPassword()), email);
         user = userDao.save(user);
 
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        var jwtToken = generateToken(user);
+        return buildToken(jwtToken);
 
     }
 
-    public  String getEmail (String token){
+    private   String extractEmail(String token){
         return this.jwtService.extractUsername(token);
     }
+    private String generateToken(User user){
+        return  jwtService.generateToken(user);
+    }
+
+    private String encodePassword(String password){
+        return passwordEncoder.encode(password);
+    }
+
+    private AuthenticationResponse buildToken(String token){
+        return AuthenticationResponse.builder().token(token).build();
+    }
+
+
 }

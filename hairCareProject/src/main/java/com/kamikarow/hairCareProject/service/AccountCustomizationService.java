@@ -38,18 +38,20 @@ public class AccountCustomizationService implements AccountCustomizationInterfac
 
     @Override
     public AccountCustomizationResponse updateAccountCustomization(String token, AccountCustomizationResponse accountCustomizationResponse) throws Exception {
+
         Long userId = getUserId(token);
         Optional<AccountCustomization> accountCustomizationInDatabase = accountCustomizationDao.getAccountCustomization(userId);
         AccountCustomization accountCustomization = new AccountCustomization().update(accountCustomizationInDatabase,accountCustomizationResponse);
         return new AccountCustomizationResponse().toAccountCustomizationResponse(accountCustomizationDao.save(accountCustomization));
     }
 
-    private  String getEmail (String token){
-        return this.jwtService.extractUsername(token);
-    }
-
     private Long getUserId (String token){
         String email = getEmail(token);
         return userDao.findByEmail(email).get().getId();
     }
+    private  String getEmail (String token){
+        return this.jwtService.extractUsername(token);
+    }
+
+
 }

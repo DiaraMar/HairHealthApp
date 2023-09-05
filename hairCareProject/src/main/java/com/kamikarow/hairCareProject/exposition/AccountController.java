@@ -30,7 +30,7 @@ public class AccountController {
     private final LogoutService logoutService;
 
 
-    @PostMapping("/resetPassword")
+    @PostMapping("/password/new")
     public ResponseEntity<AuthenticationResponse> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
         try{
             return ResponseEntity.ok(authenticationService.resetPassword(resetPasswordRequest, tokenWrapper.getToken()));
@@ -39,7 +39,7 @@ public class AccountController {
         }
     }
 
-    @PostMapping("/deconnection")
+    @PostMapping("/disconnection")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("debbug");
         System.out.println("HttpServletRequest request " +  request);

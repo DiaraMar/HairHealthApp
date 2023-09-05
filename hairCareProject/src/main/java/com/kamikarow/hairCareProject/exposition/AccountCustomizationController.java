@@ -25,15 +25,31 @@ public class AccountCustomizationController {
 
     @GetMapping
     public ResponseEntity<Optional<AccountCustomizationResponse>> getAccountCustomization() throws Exception {
-
-        String token = tokenWrapper.getToken();
+        try{
+            String token = getToken ();
             return ResponseEntity.ok(this.accountCustomizationService.getAccountCustomization( token));
+        }catch(Exception e){
+            throw new Exception(e);
+        }
     }
 
     @PatchMapping
-    public ResponseEntity<Optional<AccountCustomizationResponse>> getAccountCustomization(@RequestBody AccountCustomizationResponse accountCustomizationResponse) throws Exception {
-        String token = tokenWrapper.getToken();
-        return ResponseEntity.ok(Optional.ofNullable(this.accountCustomizationService.updateAccountCustomization(token, accountCustomizationResponse)));
+    //todo : force filled RequestBody value in front-end
+    public ResponseEntity<Optional<AccountCustomizationResponse>> updateAccount(@RequestBody AccountCustomizationResponse accountCustomizationResponse) throws Exception {
+        try{
+            String token = getToken ();
+            return ResponseEntity.ok(Optional.ofNullable(this.accountCustomizationService.updateAccountCustomization(token, accountCustomizationResponse)));
+        }catch(Exception e){
+            throw new Exception(e);
+        }
     }
 
+    private String getToken () throws Exception {
+        try{
+            return tokenWrapper.getToken();
+        }
+        catch (Exception e){
+            throw new Exception(e);
+        }
+    }
 }
