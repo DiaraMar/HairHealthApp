@@ -1,6 +1,7 @@
 package com.kamikarow.hairCareProject.domain.user;
 
 
+import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,9 +19,12 @@ import java.util.List;
 @Table(name = "_user")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue/** DefaultValue (strategy = GenerationType.AUTO)**/
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
+
+
+
     private String firstname;
     private String lastname;
     private String email;
@@ -29,9 +33,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-   /* @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private AccountCustomization accountCustomization;*/
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private AccountCustomization accountCustomization;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -66,34 +69,6 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
 

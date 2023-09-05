@@ -1,13 +1,14 @@
 package com.kamikarow.hairCareProject.service;
 
 import com.kamikarow.hairCareProject.config.JwtService;
+import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
 import com.kamikarow.hairCareProject.domain.user.UserInterface;
 import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationResponse;
 import com.kamikarow.hairCareProject.exposition.DTO.RegisterRequest;
-import com.kamikarow.hairCareProject.domain.user.Role;
 import com.kamikarow.hairCareProject.domain.user.User;
 import com.kamikarow.hairCareProject.exposition.DTO.ResetPasswordRequest;
+import com.kamikarow.hairCareProject.infra.AccountCustomizationDao;
 import com.kamikarow.hairCareProject.infra.UserDao;
 import com.kamikarow.hairCareProject.utility.exception.EmailAlreadyExistsException;
 import com.kamikarow.hairCareProject.utility.exception.Unauthorized;
@@ -17,13 +18,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService implements UserInterface {
 
     private final UserDao userDao;
+    private final AccountCustomizationDao accountCustomizationDao;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -35,6 +35,10 @@ public class AuthenticationService implements UserInterface {
 
         var user = new RegisterRequest().toUser(registerRequest, passwordEncoder.encode(registerRequest.getPassword()));
         user = userDao.save(user);
+
+        var accountCustomization = new AccountCustomization(user);
+        accountCustomizationDao.save(accountCustomization);
+
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
