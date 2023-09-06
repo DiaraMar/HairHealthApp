@@ -2,7 +2,7 @@ package com.kamikarow.hairCareProject.service;
 
 import com.kamikarow.hairCareProject.config.JwtService;
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
-import com.kamikarow.hairCareProject.domain.AuthInterface;
+import com.kamikarow.hairCareProject.domain.auth.AuthInterface;
 import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationResponse;
 import com.kamikarow.hairCareProject.exposition.DTO.RegisterRequest;

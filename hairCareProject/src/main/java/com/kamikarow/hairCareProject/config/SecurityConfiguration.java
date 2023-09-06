@@ -45,6 +45,7 @@ public class SecurityConfiguration {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
+                .requestMatchers("/api/v1/diagnostics/**").permitAll()
                 .requestMatchers("/api/v1/accountExperience/**").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/me/**").permitAll()

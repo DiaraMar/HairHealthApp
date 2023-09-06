@@ -2,6 +2,7 @@ package com.kamikarow.hairCareProject.domain.user;
 
 
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
+import com.kamikarow.hairCareProject.domain.diagnostic.Diagnostic;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @Builder
@@ -35,6 +37,9 @@ public class User implements UserDetails {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private AccountCustomization accountCustomization;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Diagnostic> diagnostics;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -72,4 +77,10 @@ public class User implements UserDetails {
     }
 
 
+    public User toUser(Optional<User> userIndataBase) {
+        User user = userIndataBase.get();
+        return User.builder()
+                .id(user.getId())
+                .build();
+    }
 }

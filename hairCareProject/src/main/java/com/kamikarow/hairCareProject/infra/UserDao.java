@@ -18,13 +18,18 @@ public class UserDao {
 
     public User save(User user){
         System.out.println("debbug infra user" + user);
-
         return userJpaRepository.save(user);
     }
 
     public Optional<UserDTO> getUserProfil(String email){
         Optional<User> user = findByEmail(email);
         return Optional.ofNullable(new UserDTO().toUserDTO(user));
+
+    }
+
+    public Long getUserId(String email){
+        Optional<User> user = findByEmail(email);
+        return user.get().getId();
 
     }
 

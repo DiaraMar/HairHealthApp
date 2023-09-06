@@ -1,4 +1,4 @@
-package com.kamikarow.hairCareProject.domain;
+package com.kamikarow.hairCareProject.domain.auth;
 
 import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationResponse;
