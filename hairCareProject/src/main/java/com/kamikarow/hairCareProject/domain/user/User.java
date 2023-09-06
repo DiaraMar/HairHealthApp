@@ -26,6 +26,7 @@ public class User implements UserDetails {
 
     private String firstname;
     private String lastname;
+    //TODO add @Column(unique=true) and delete logic in service
     private String email;
     private String password;
     private String phoneNumber;

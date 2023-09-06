@@ -3,10 +3,9 @@ package com.kamikarow.hairCareProject.exposition.DTO;
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
 import com.kamikarow.hairCareProject.domain.user.Role;
 import com.kamikarow.hairCareProject.domain.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
 @Data
 @Builder
@@ -14,10 +13,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterRequest {
 
+    @NotBlank //todo : annotation not working
     private String firstname;
+    @NotBlank
     private String lastname;
+    @NotBlank
     private String email;
+    @NotBlank
     private String password;
+    @NotBlank
     private String phoneNumber;
     private AccountCustomization accountCustomization;
 
@@ -25,6 +29,7 @@ public class RegisterRequest {
 
 
     public User toUser(RegisterRequest registerRequest, String passwordEncoded){
+
         return   User.builder()
                 .firstname(registerRequest.getFirstname())
                 .lastname(registerRequest.getLastname())
