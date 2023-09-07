@@ -19,9 +19,9 @@ public class Diagnostic {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "owner", referencedColumnName = "id")
     @JsonIgnore
-    private User user;
+    private User owner;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by", referencedColumnName = "id")

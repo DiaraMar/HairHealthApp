@@ -28,7 +28,7 @@ public class DiagnosticRequest {
 
     public Diagnostic toDiagnostic(DiagnosticRequest diagnosticRequest, User client, User creator){
         return Diagnostic.builder()
-                .user(client)
+                .owner(client)
                 .createdBy(creator)
                 .createdOn(LocalDateTime.now())
                 .report(diagnosticRequest.report)
