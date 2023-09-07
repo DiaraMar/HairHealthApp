@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -15,10 +14,13 @@ public class DiagnosticDao {
     private final DiagnosticJpaRepository diagnosticJpaRepository;
 
     public Diagnostic save(Diagnostic diagnostic){
+        System.out.println(diagnostic);
         return this.diagnosticJpaRepository.save(diagnostic);
     }
 
-    public List<Optional<Diagnostic>> retrievesAll(Long id){
+    public List<Diagnostic> retrievesAll(Long id){
+        System.out.println("infra id" + id);
         return this.diagnosticJpaRepository.findAllDiagnosticsBy(id);
     }
+
 }

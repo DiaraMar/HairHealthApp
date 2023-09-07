@@ -22,8 +22,8 @@ public class DiagnosticResponse {
     private LocalDateTime createdOn;
     private User createdBy;
 
-    public DiagnosticResponse toDiagnosticResponse(Optional<Diagnostic> diagnosticOptional){
-        Diagnostic diagnostic = diagnosticOptional.get();
+    public DiagnosticResponse toDiagnosticResponse(Diagnostic diagnosticInput){
+        Diagnostic diagnostic = diagnosticInput;
         return DiagnosticResponse.builder()
                 .createdOn(diagnostic.getCreatedOn())
                 .createdBy(diagnostic.getCreatedBy())
@@ -32,9 +32,9 @@ public class DiagnosticResponse {
                 .build();
     }
 
-    public List<DiagnosticResponse> toListOfDiagnosticResponse(List <Optional<Diagnostic>>diagnosticList){
+    public List<DiagnosticResponse> toListOfDiagnosticResponse(List <Diagnostic>diagnosticList){
         List<DiagnosticResponse> diagnosticResponseList = new ArrayList<>();
-        for (Optional<Diagnostic> diagnostic : diagnosticList) {
+        for (Diagnostic diagnostic : diagnosticList) {
             diagnosticResponseList.add(toDiagnosticResponse(diagnostic));
         }
         return diagnosticResponseList;

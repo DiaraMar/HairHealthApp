@@ -24,10 +24,11 @@ public class DiagnosticController {
     private final BearerTokenWrapper tokenWrapper;
 
     @GetMapping
-    public ResponseEntity<Optional<List<DiagnosticResponse>>> retrieveAllDiagnostics() throws Exception {
+    public ResponseEntity<List<DiagnosticResponse>> retrieveAllDiagnostics() throws Exception {
         try{
+            System.out.println("controller retrieve all diagnostics");
             String token = getToken ();
-            return ResponseEntity.ok(Optional.ofNullable(this.diagnosticService.retrieveAllDiagnostics(token)));
+            return ResponseEntity.ok(this.diagnosticService.retrieveAllDiagnostics(token));
         }catch(Exception e){
             throw new Exception(e);
         }

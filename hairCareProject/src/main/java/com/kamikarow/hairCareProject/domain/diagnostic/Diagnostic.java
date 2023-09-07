@@ -24,6 +24,7 @@ public class Diagnostic {
     private User user;
 
     @Column(name = "created_by")
+    @JsonIgnore
     private User createdBy;
 
     @Column(name = "created_on")
@@ -35,6 +36,4 @@ public class Diagnostic {
     @Column(name = "conclusion")
     private String conclusion;
 
-    // Getter and setter methods
 }
-

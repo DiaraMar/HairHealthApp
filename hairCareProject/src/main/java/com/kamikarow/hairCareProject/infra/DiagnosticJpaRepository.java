@@ -10,14 +10,9 @@ import java.util.Optional;
 
 public interface DiagnosticJpaRepository extends JpaRepository<Diagnostic,Long> {
 
-    @Query(value = "select * from kkarowdb.diagnostic a WHERE a.user_id = :id", nativeQuery = true)
-    Optional<Diagnostic> findDiagnosticBy(@Param("id") Long userID);
 
     @Query(value = "select * from kkarowdb.diagnostic a WHERE a.user_id = :id", nativeQuery = true)
-    List<Optional<Diagnostic>> findAllDiagnosticsBy(@Param("id") Long userID);
-
-
-
+    List<Diagnostic> findAllDiagnosticsBy(@Param("id") Long userID);
 
 
 }

@@ -37,7 +37,7 @@ public class DiagnosticService implements DiagnosticInterface {
 
     @Override
     public List<DiagnosticResponse> retrieveAllDiagnostics(String token) {
-       Optional<User> user = userDao.findByEmail(getEmail(token));
+        Optional<User> user = userDao.findByEmail(getEmail(token));
         return new DiagnosticResponse().toListOfDiagnosticResponse(this.diagnosticDao.retrievesAll(user.get().getId()));
     }
 
