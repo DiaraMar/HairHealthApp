@@ -29,10 +29,10 @@ public class DiagnosticService implements DiagnosticInterface {
     public Diagnostic save(DiagnosticRequest diagnosticRequest, String token) {
 
         User client = new User().toUser(userDao.findByEmail(diagnosticRequest.getClient()));
-/*
+
         User creator = new User().toUser(userDao.findByEmail(getEmail(token)));
-*/
-        return this.diagnosticDao.save(new DiagnosticRequest().toDiagnostic(diagnosticRequest, client, null ));
+
+        return this.diagnosticDao.save(new DiagnosticRequest().toDiagnostic(diagnosticRequest, client, creator ));
     }
 
     @Override

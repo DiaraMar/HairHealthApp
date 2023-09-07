@@ -23,7 +23,8 @@ public class Diagnostic {
     @JsonIgnore
     private User user;
 
-    @Column(name = "created_by")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", referencedColumnName = "id")
     @JsonIgnore
     private User createdBy;
 
