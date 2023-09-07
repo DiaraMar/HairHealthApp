@@ -3,7 +3,6 @@ package com.kamikarow.hairCareProject.exposition.DTO;
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
 import com.kamikarow.hairCareProject.domain.user.Role;
 import com.kamikarow.hairCareProject.domain.user.User;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -13,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 public class RegisterRequest {
 
-    @NotBlank //todo : annotation not working
+    @NotBlank
     private String firstname;
     @NotBlank
     private String lastname;

@@ -45,7 +45,6 @@ public class JwtAuthenticationFilterService extends OncePerRequestFilter {
      */
     private final UserDetailsService userDetailsService;
 
-    //Todo : documentation and explication about doFilterInternal args
 
     /**
      * DoFilterInternal method

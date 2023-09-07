@@ -5,10 +5,12 @@ import com.kamikarow.hairCareProject.exposition.DTO.DiagnosticRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.DiagnosticResponse;
 import com.kamikarow.hairCareProject.service.DiagnosticService;
 import com.kamikarow.hairCareProject.utility.BearerTokenWrapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,8 +37,9 @@ public class DiagnosticController {
     }
 
 
-    @PostMapping //todo role labo
-    public ResponseEntity<Optional<Diagnostic>> saveDiagnostic(@RequestBody DiagnosticRequest diagnosticRequest) throws Exception {
+    @PreAuthorize("hasRole('SUB_CONTRACTOR')")
+    @PostMapping //todo role subcontractor
+    public ResponseEntity<Optional<Diagnostic>> saveDiagnostic(@Valid @RequestBody DiagnosticRequest diagnosticRequest) throws Exception {
         try{
             String token = getToken ();
             return ResponseEntity.ok(Optional.ofNullable(this.diagnosticService.save(diagnosticRequest, token)));

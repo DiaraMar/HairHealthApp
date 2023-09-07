@@ -29,10 +29,10 @@ public class AuthenticationService implements AuthInterface {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
-        if(!userDao.findByEmail(registerRequest.getEmail()).isEmpty() || userDao.findByEmail(registerRequest.getEmail()).isPresent()) {
-            throw new EmailAlreadyExistsException("Username already in database");
-        }
 
+  /**
+   * if(!userDao.findByEmail(registerRequest.getEmail()).isEmpty() || userDao.findByEmail(registerRequest.getEmail()).isPresent()) {
+            throw new EmailAlreadyExistsException("Username already in database");} replaced by @column(unique(true)*/
         var user = new RegisterRequest().toUser(registerRequest, encodePassword(registerRequest.getPassword()));
         user = userDao.save(user);
 

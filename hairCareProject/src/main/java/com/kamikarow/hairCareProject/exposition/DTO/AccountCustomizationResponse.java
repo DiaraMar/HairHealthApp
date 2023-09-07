@@ -1,6 +1,7 @@
 package com.kamikarow.hairCareProject.exposition.DTO;
 
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

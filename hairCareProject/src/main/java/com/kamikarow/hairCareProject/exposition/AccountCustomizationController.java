@@ -1,10 +1,10 @@
 package com.kamikarow.hairCareProject.exposition;
 
 
-import com.kamikarow.hairCareProject.exposition.DTO.AccountCustomizationRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.AccountCustomizationResponse;
 import com.kamikarow.hairCareProject.service.AccountCustomizationService;
 import com.kamikarow.hairCareProject.utility.BearerTokenWrapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +34,6 @@ public class AccountCustomizationController {
     }
 
     @PatchMapping
-    //todo : force filled RequestBody value in front-end
     public ResponseEntity<Optional<AccountCustomizationResponse>> updateAccount(@RequestBody AccountCustomizationResponse accountCustomizationResponse) throws Exception {
         try{
             String token = getToken ();

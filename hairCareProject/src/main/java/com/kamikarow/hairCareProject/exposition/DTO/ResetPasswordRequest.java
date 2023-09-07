@@ -2,6 +2,7 @@ package com.kamikarow.hairCareProject.exposition.DTO;
 
 import com.kamikarow.hairCareProject.domain.user.Role;
 import com.kamikarow.hairCareProject.domain.user.User;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +15,11 @@ import java.util.Optional;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResetPasswordRequest {
+    @NotBlank
     private String email;
+    @NotBlank
     private String oldPassword;
+    @NotBlank
     private String newPassword;
 
 

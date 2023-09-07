@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,8 +19,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DiagnosticRequest {
+    @NotBlank
     private String client;
+    @NotBlank
     private String report;
+    @NotBlank
     private String conclusion;
 
     public Diagnostic toDiagnostic(DiagnosticRequest diagnosticRequest, User client, User creator){

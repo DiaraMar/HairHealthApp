@@ -5,6 +5,8 @@ import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationResponse;
 import com.kamikarow.hairCareProject.exposition.DTO.RegisterRequest;
 import com.kamikarow.hairCareProject.service.AuthenticationService;
 import com.kamikarow.hairCareProject.utility.exception.EmailAlreadyExistsException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +27,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
         try{
             return ResponseEntity.ok(authenticationService.register(registerRequest));
         }catch (EmailAlreadyExistsException emailAlreadyExistsException){
@@ -34,7 +36,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest) throws AuthenticationException {
+    public ResponseEntity<AuthenticationResponse> authenticate(@Valid @RequestBody AuthenticationRequest authenticationRequest) throws AuthenticationException {
         try{
             return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));  }
         catch (AuthenticationException authenticationException){

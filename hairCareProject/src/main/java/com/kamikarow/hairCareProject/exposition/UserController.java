@@ -8,6 +8,7 @@ import com.kamikarow.hairCareProject.service.LogoutService;
 import com.kamikarow.hairCareProject.service.UserService;
 import com.kamikarow.hairCareProject.utility.BearerTokenWrapper;
 import com.kamikarow.hairCareProject.utility.exception.EmailAlreadyExistsException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +34,7 @@ public class UserController {
 
 
     @PostMapping("/password/new")
-    public ResponseEntity<AuthenticationResponse> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+    public ResponseEntity<AuthenticationResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
         try{
             return ResponseEntity.ok(authenticationService.resetPassword(resetPasswordRequest, getToken()));
         }catch (EmailAlreadyExistsException emailAlreadyExistsException){

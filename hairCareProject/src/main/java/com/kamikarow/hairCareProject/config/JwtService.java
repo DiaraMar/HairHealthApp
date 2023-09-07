@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,9 @@ public class JwtService {
      * If bit doesn't meet bit requirement it can also lead to errors
      */
     static Properties properties = new Properties();
-    private static final String SECRET_KEY = "6E3272357538782F413F4428472D4B6150645367566B59703373367639792442"; //todo : move to application properties
+
+    @Value("${jwt.secretKey}")
+    private String secretKey;
 
     /**
      * extractAllClaims
@@ -55,7 +58,7 @@ public class JwtService {
      * @return Key
      */
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);//todo :extract variable from method
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         // requestTokenHeader.substring("Bearer ".length());
         return Keys.hmacShaKeyFor(keyBytes);
     }
