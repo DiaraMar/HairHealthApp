@@ -26,7 +26,6 @@ public class DiagnosticResponse {
         Diagnostic diagnostic = diagnosticInput;
         return DiagnosticResponse.builder()
                 .createdOn(diagnostic.getCreatedOn())
-                .createdBy(diagnostic.getCreatedBy())
                 .report(diagnostic.getReport())
                 .conclusion(diagnostic.getConclusion())
                 .build();

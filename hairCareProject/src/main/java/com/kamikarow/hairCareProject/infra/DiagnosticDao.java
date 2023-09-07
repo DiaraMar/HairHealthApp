@@ -19,7 +19,6 @@ public class DiagnosticDao {
     }
 
     public List<Diagnostic> retrievesAll(Long id){
-        System.out.println("infra id" + id);
         return this.diagnosticJpaRepository.findAllDiagnosticsBy(id);
     }
 
