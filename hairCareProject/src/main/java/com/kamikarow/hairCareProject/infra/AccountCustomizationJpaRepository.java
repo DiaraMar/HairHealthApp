@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface AccountCustomizationJpaRepository  extends JpaRepository<AccountCustomization,Long> {
 
-    @Query(value="select * from kkarowdb.account_customization a WHERE a.user_id = :id",  nativeQuery = true)
+    @Query(value="select * from kkarowdb.account_customization a WHERE a.owner = :id",  nativeQuery = true)
     Optional<AccountCustomization> findAccountCustomizationBy(@Param("id") Long userID);
 
 

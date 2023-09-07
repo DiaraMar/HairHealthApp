@@ -28,13 +28,12 @@ public class Diagnostic {
     @JsonIgnore
     private User createdBy;
 
+
     @Column(name = "created_on")
     private LocalDateTime createdOn;
 
-    @Column(name = "report")
     private String report;
 
-    @Column(name = "conclusion")
     private String conclusion;
 
 }

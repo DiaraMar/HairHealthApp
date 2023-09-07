@@ -25,7 +25,6 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Long id;
 
-
     private String firstname;
     private String lastname;
     @Column(unique = true)
@@ -35,11 +34,13 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private AccountCustomization accountCustomization;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Diagnostic> diagnostics;
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

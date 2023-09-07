@@ -24,16 +24,16 @@ public class AccountCustomization {
     private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "owner", referencedColumnName = "id")
     @JsonIgnore
-    private User user;
+    private User owner;
 
     private boolean newsletter;
     private boolean sms;
-    public AccountCustomization(User user) {
+    public AccountCustomization(User owner) {
         this.newsletter=true;
         this.sms=true;
-        this.user = user;
+        this.owner = owner;
     }
 
 
@@ -41,7 +41,7 @@ public class AccountCustomization {
         return AccountCustomization
                 .builder()
                 .id(accountCustomizationInDatabase.get().id)
-                .user(accountCustomizationInDatabase.get().user)
+                .owner(accountCustomizationInDatabase.get().owner)
                 .newsletter(accountCustomizationResponse.isNewsletter())
                 .sms(accountCustomizationResponse.isSms())
                 .build();
