@@ -21,7 +21,7 @@ import java.util.Optional;
 public class AccountCustomization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer id; //TODO : change to long
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner", referencedColumnName = "id")

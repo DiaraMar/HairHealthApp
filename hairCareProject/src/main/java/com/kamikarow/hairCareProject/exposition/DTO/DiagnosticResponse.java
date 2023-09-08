@@ -1,6 +1,7 @@
 package com.kamikarow.hairCareProject.exposition.DTO;
 
 import com.kamikarow.hairCareProject.domain.diagnostic.Diagnostic;
+import com.kamikarow.hairCareProject.domain.file.File;
 import com.kamikarow.hairCareProject.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,13 +22,17 @@ public class DiagnosticResponse {
     private String conclusion;
     private LocalDateTime createdOn;
     private User createdBy;
+    private FileResponse fileResponse;
 
     public DiagnosticResponse toDiagnosticResponse(Diagnostic diagnosticInput){
         Diagnostic diagnostic = diagnosticInput;
+        FileResponse fileValue = diagnostic.getFile() == null ? null: new FileResponse().toFileResponse(diagnostic.getFile());
+
         return DiagnosticResponse.builder()
                 .createdOn(diagnostic.getCreatedOn())
                 .report(diagnostic.getReport())
                 .conclusion(diagnostic.getConclusion())
+                .fileResponse(fileValue)
                 .build();
     }
 
