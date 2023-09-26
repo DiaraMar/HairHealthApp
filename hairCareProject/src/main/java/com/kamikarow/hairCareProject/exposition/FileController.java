@@ -31,17 +31,12 @@ public class FileController {
             @RequestParam ("title")String title,
             @RequestParam ("fileExtension")String fileExtension,
             @RequestParam ("document") MultipartFile document
-
     ) throws Exception {
         try{
             String token = getToken ();
-
+            System.out.println("test file endpoint");
             FileRequest fileRequest = new FileRequest().toFileRequest(diagnostic, title,fileExtension, document);
-
-            return null;
-/*
             return ResponseEntity.ok(this.fileService.save(fileRequest, token));
-*/
 
         }catch(Exception e){
             throw new Exception(e);

@@ -21,7 +21,7 @@ public class DiagnosticResponse {
     private String report;
     private String conclusion;
     private LocalDateTime createdOn;
-    private User createdBy;
+    //private User createdBy;
     private FileResponse fileResponse;
 
     public DiagnosticResponse toDiagnosticResponse(Diagnostic diagnosticInput){

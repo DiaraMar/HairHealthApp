@@ -1,9 +1,9 @@
 package com.kamikarow.hairCareProject.service;
 
-import com.kamikarow.hairCareProject.config.JwtService;
+import com.kamikarow.hairCareProject.exposition.config.JwtService;
 import com.kamikarow.hairCareProject.domain.diagnostic.Diagnostic;
-import com.kamikarow.hairCareProject.domain.file.File;
 import com.kamikarow.hairCareProject.domain.file.FileInterface;
+import com.kamikarow.hairCareProject.domain.user.User;
 import com.kamikarow.hairCareProject.exposition.DTO.FileRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.FileResponse;
 import com.kamikarow.hairCareProject.infra.DiagnosticDao;
@@ -19,21 +19,36 @@ import org.springframework.stereotype.Service;
 public class FileService implements FileInterface {
 
     private static final Logger logger = LogManager.getLogger(FileService.class);
-    private final DiagnosticDao diagnosticDao;
     private final UserDao userDao;
     private final FileDao fileDao;
+    private final DiagnosticDao diagnosticDao;
 
     private final JwtService jwtService;
 
     @Override
     public FileResponse save(FileRequest fileRequest, String token) {
-        System.out.println("debbug service "+ fileRequest);
-        //String email = getEmail(token);
-        //User user = userDao.findByEmail(email);
+
+        String email = getEmail(token);
+
+        User createdBy = new User().toUser(userDao.findByEmail(email));
+
+        var idDiagnostic = fileRequest.getDiagnostic().getId();
+
         Diagnostic diagnostic = new Diagnostic();
-        diagnostic.setId(fileRequest.getDiagnostic().getId());
+        diagnostic.setId(idDiagnostic);
+        System.out.println("IV");
+        System.out.println(diagnosticDao.owner(idDiagnostic));
+        diagnostic.setOwner(diagnosticDao.owner(idDiagnostic));
+        System.out.println("V");
+
         fileRequest.setDiagnostic(diagnostic);
-        return new FileResponse().toFileResponse(fileDao.save(fileRequest.toFile()));
+
+        fileRequest.setCreatedBy(createdBy);
+
+        System.out.println("debbug service" +fileRequest.getTitle());
+
+        new FileResponse().toFileResponse(fileDao.save(fileRequest.toFile()));
+        return null;
     }
 
 

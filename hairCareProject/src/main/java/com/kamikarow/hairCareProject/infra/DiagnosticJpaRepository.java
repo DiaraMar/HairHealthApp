@@ -14,5 +14,6 @@ public interface DiagnosticJpaRepository extends JpaRepository<Diagnostic,Long> 
     @Query(value = "select * from kkarowdb.diagnostic a WHERE a.owner = :id", nativeQuery = true)
     List<Diagnostic> findAllDiagnosticsBy(@Param("id") Long userID);
 
-
+    @Query(value = "select * from kkarowdb.diagnostic a WHERE a.id = :id", nativeQuery = true)
+    Optional<Diagnostic> findById(@Param("id") Long userID);
 }

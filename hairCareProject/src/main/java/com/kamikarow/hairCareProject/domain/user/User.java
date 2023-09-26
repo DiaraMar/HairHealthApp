@@ -3,6 +3,7 @@ package com.kamikarow.hairCareProject.domain.user;
 
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
 import com.kamikarow.hairCareProject.domain.diagnostic.Diagnostic;
+import com.kamikarow.hairCareProject.domain.file.File;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,6 +40,13 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Diagnostic> diagnostics;
+
+  /*  @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
+    private List<File> createdFiles;*/
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<File> ownedFiles;
+
 
 
 

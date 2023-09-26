@@ -2,6 +2,7 @@ package com.kamikarow.hairCareProject.domain.file;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kamikarow.hairCareProject.domain.diagnostic.Diagnostic;
+import com.kamikarow.hairCareProject.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,13 +28,13 @@ public class File {
     @JsonIgnore
     private Diagnostic diagnostic;
 
-   /* @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", referencedColumnName = "id")
     private User createdBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner", referencedColumnName = "id")
-    private User owner;*/
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    private User owner;
 
     @Column(name = "title")
     private String title;
@@ -46,4 +47,11 @@ public class File {
 
     @Column(name = "created_on")
     private LocalDateTime createdOn;
+
+    public void setDiagnostic(Diagnostic diagnostic) {
+        this.diagnostic = diagnostic;
+        if (diagnostic != null && diagnostic.getOwner() != null) {
+            this.owner = diagnostic.getOwner();
+        }
+    }
 }

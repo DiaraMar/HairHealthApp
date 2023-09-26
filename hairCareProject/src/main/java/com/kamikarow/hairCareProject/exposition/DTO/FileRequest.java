@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kamikarow.hairCareProject.domain.diagnostic.Diagnostic;
 import com.kamikarow.hairCareProject.domain.file.File;
+import com.kamikarow.hairCareProject.domain.user.User;
+import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,20 +27,24 @@ public class FileRequest {
     private String title;
 
     private String fileExtension;
-
+    @Lob
     private byte[] document;
 
     private LocalDateTime createdOn;
+    private User createdBy;
 
 
     public File toFile(){
-        return File.builder()
+        File file =  File.builder()
                 .diagnostic(diagnostic)
                 .title(title)
                 .fileExtension(fileExtension)
                 .document(document)
                 .createdOn(LocalDateTime.now())
+                .owner(diagnostic.getOwner())
                 .build();
+        System.out.println("debugg filerequest to file  "+ file);
+        return file;
     }
 
 
@@ -46,7 +52,7 @@ public class FileRequest {
     public FileRequest toFileRequest(String diagnosticJSON, String titleInput, String fileExtensionInput, MultipartFile documentInput) throws Exception {
 
 
-        byte[] newDocument = convertMultipartFileToByteArray(documentInput);
+        byte[] newDocument = compressFile(documentInput);
 
         if (newDocument == null || newDocument.length == 0){
             throw new Exception("Exception");
@@ -57,6 +63,7 @@ public class FileRequest {
         if(idDiagnostic<=0){
             throw new Exception("Exception");
         }
+
         newDiagnostic.setId(idDiagnostic);
 
         return FileRequest.builder()
@@ -75,6 +82,9 @@ public class FileRequest {
     return jsonNode.get("id").asLong();
     }
 
-    public byte[] convertMultipartFileToByteArray(MultipartFile multipartFile) throws IOException {
+    public byte[] compressFile(MultipartFile multipartFile) throws IOException {
         return multipartFile.getBytes();}
+
+
+
 }

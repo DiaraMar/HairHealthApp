@@ -1,6 +1,6 @@
 package com.kamikarow.hairCareProject.service;
 
-import com.kamikarow.hairCareProject.config.JwtService;
+import com.kamikarow.hairCareProject.exposition.config.JwtService;
 import com.kamikarow.hairCareProject.domain.user.User;
 import com.kamikarow.hairCareProject.domain.user.UserInterface;
 import com.kamikarow.hairCareProject.exposition.DTO.UserDTO;

@@ -1,4 +1,4 @@
-package com.kamikarow.hairCareProject.config;
+package com.kamikarow.hairCareProject.exposition.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

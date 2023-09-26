@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Data
 @Builder
@@ -38,5 +39,6 @@ public class Diagnostic {
     private String report;
 
     private String conclusion;
+
 
 }

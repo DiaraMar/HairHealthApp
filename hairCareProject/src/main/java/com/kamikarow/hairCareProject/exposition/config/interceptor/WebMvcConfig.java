@@ -1,4 +1,4 @@
-package com.kamikarow.hairCareProject.config.interceptor;
+package com.kamikarow.hairCareProject.exposition.config.interceptor;
 
 
 import com.kamikarow.hairCareProject.utility.BearerTokenInterceptor;

@@ -1,9 +1,8 @@
 package com.kamikarow.hairCareProject.service;
 
-import com.kamikarow.hairCareProject.config.JwtService;
+import com.kamikarow.hairCareProject.exposition.config.JwtService;
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomizationInterface;
-import com.kamikarow.hairCareProject.exposition.DTO.AccountCustomizationRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.AccountCustomizationResponse;
 import com.kamikarow.hairCareProject.infra.AccountCustomizationDao;
 import com.kamikarow.hairCareProject.infra.UserDao;

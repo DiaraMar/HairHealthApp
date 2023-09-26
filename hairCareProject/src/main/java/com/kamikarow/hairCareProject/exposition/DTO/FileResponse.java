@@ -24,6 +24,8 @@ public class FileResponse {
 
     private LocalDateTime createdOn;
 
+//    private UserDTO owner;
+
     public FileResponse toFileResponse(File file){
         return FileResponse.builder()
                 .title(file.getTitle())
