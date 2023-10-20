@@ -4,6 +4,7 @@ package com.kamikarow.hairCareProject.domain.user;
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
 import com.kamikarow.hairCareProject.domain.diagnostic.Diagnostic;
 import com.kamikarow.hairCareProject.domain.file.File;
+import com.kamikarow.hairCareProject.domain.routine.Routine;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
+@ToString(exclude = {"accountCustomization", "diagnostics", "ownedFiles"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +49,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<File> ownedFiles;
 
-
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Routine> routines;
 
 
     @Override
@@ -85,6 +88,16 @@ public class User implements UserDetails {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                // ... add any other fields you want to include ...
+                '}';
+    }
 
     public User toUser(Optional<User> userIndataBase) {
         User user = userIndataBase.get();

@@ -37,13 +37,13 @@ public class AccountCustomization {
     }
 
 
-    public AccountCustomization update(Optional<AccountCustomization> accountCustomizationInDatabase, AccountCustomizationResponse accountCustomizationResponse) {
+    public AccountCustomization toAccountCustomization(Optional<AccountCustomization> accountCustomizationInDatabase) {
         return AccountCustomization
                 .builder()
                 .id(accountCustomizationInDatabase.get().id)
                 .owner(accountCustomizationInDatabase.get().owner)
-                .newsletter(accountCustomizationResponse.isNewsletter())
-                .sms(accountCustomizationResponse.isSms())
+                .newsletter(accountCustomizationInDatabase.get().isNewsletter())
+                .sms(accountCustomizationInDatabase.get().isSms())
                 .build();
     }
 }

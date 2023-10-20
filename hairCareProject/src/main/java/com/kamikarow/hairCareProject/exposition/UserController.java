@@ -33,6 +33,7 @@ public class UserController {
     private final LogoutService logoutService;
 
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/password/new")
     public ResponseEntity<AuthenticationResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
         try{

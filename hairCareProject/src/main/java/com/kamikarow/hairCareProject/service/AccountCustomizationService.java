@@ -40,8 +40,19 @@ public class AccountCustomizationService implements AccountCustomizationInterfac
 
         Long userId = getUserId(token);
         Optional<AccountCustomization> accountCustomizationInDatabase = accountCustomizationDao.getAccountCustomization(userId);
-        AccountCustomization accountCustomization = new AccountCustomization().update(accountCustomizationInDatabase,accountCustomizationResponse);
-        return new AccountCustomizationResponse().toAccountCustomizationResponse(accountCustomizationDao.save(accountCustomization));
+
+        if(!accountCustomizationInDatabase.get().isSms()==accountCustomizationResponse.isSms()){
+            accountCustomizationDao.updateSmsPreference(userId, accountCustomizationResponse.isSms());
+            accountCustomizationInDatabase.get().setSms(accountCustomizationResponse.isSms());
+        }
+        if(!accountCustomizationInDatabase.get().isNewsletter()==accountCustomizationResponse.isNewsletter()){
+            accountCustomizationDao.updateNewsLetterPreference(userId, accountCustomizationResponse.isNewsletter());
+            accountCustomizationInDatabase.get().setNewsletter(accountCustomizationResponse.isNewsletter());
+        }
+        AccountCustomization accountCustomization = new AccountCustomization().toAccountCustomization(accountCustomizationInDatabase);
+
+
+        return new AccountCustomizationResponse().toAccountCustomizationResponse(accountCustomization);
     }
 
     private Long getUserId (String token){

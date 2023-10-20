@@ -39,12 +39,28 @@ public class UserService implements UserInterface {
 
         //saveUser
 
-        Optional<User> updatedUser = Optional.ofNullable(userDao.save(updateUser));
-        System.out.println("debbug service updatedUser" + updatedUser);
+        if(!userInDatabase.get().getFirstname().equals(updateUser.getFirstname()) && !updateUser.getFirstname().isEmpty()){
+            userDao.updateFirstname(userInDatabase.get().getId(), updateUser.getFirstname());
+            userInDatabase.get().setFirstname(updateUser.getFirstname());
+        }
 
-        //returnDto
+        if(!userInDatabase.get().getLastname().equals(updateUser.getLastname()) && !updateUser.getLastname().isEmpty()){
+            userDao.updateLastname(userInDatabase.get().getId(), updateUser.getLastname());
+            userInDatabase.get().setLastname(updateUser.getLastname());
+        }
 
-        return new UserDTO().toUserDTO(updatedUser);
+        //todo : fix. update works one time only
+        if(!userInDatabase.get().getEmail().equals(updateUser.getEmail()) && !updateUser.getEmail().isEmpty()) {
+            userDao.updateEmail(userInDatabase.get().getId(), updateUser.getEmail());
+            userInDatabase.get().setEmail(updateUser.getEmail());
+        }
+
+        if(!userInDatabase.get().getPhoneNumber().equals(updateUser.getPhoneNumber()) && !updateUser.getPhoneNumber().isEmpty()) {
+            userDao.updatePhoneNumber(userInDatabase.get().getId(), updateUser.getPhoneNumber());
+            userInDatabase.get().setPhoneNumber(updateUser.getPhoneNumber());
+        }
+
+        return new UserDTO().toUserDTO(userInDatabase);
     }
 
     private  String getEmail (String token){

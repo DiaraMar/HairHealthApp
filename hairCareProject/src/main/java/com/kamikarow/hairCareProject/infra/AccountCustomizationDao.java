@@ -2,6 +2,7 @@ package com.kamikarow.hairCareProject.infra;
 
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
 import com.kamikarow.hairCareProject.exposition.DTO.AccountCustomizationResponse;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,16 @@ public class AccountCustomizationDao {
         }catch (Exception e){
             throw new Exception(e);
         }
+    }
+
+    @Transactional
+    public void updateSmsPreference(Long id, boolean sms){
+        accountCustomizationJpaRepository.updateSmsPreference(id, sms);
+    }
+
+    @Transactional
+    public void updateNewsLetterPreference(Long id, boolean newsLetter){
+        accountCustomizationJpaRepository.updatenewsLetterPreference(id, newsLetter);
     }
 
 }

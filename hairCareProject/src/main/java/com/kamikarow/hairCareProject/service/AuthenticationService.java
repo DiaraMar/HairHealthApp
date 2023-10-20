@@ -68,7 +68,7 @@ public class AuthenticationService implements AuthInterface {
 
 
         User user = new ResetPasswordRequest().toUser(userDao.findByEmail(email), encodePassword(resetPasswordRequest.getNewPassword()), email);
-        user = userDao.save(user);
+        userDao.resetPassword(user.getId(), user.getPassword());
 
         var jwtToken = generateToken(user);
         return buildToken(jwtToken);
