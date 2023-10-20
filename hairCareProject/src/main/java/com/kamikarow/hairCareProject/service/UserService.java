@@ -21,7 +21,7 @@ public class UserService implements UserInterface {
     @Override
     public Optional<UserDTO> getUserProfil(String token) {
         String email = getEmail(token);
-        return userDao.getUserProfil(email);
+        return getProfil(email);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class UserService implements UserInterface {
         String email = getEmail(token);
 
         //get userInDatabase
-        Optional<User> userInDatabase = userDao.findByEmail(email);
+        Optional<User> userInDatabase = findBy(email);
         //toUser
         User updateUser = new UserDTO().toUser(userInDatabase,userDTO);
         System.out.println("debbug service updateUser " + updateUser);
@@ -40,29 +40,49 @@ public class UserService implements UserInterface {
         //saveUser
 
         if(!userInDatabase.get().getFirstname().equals(updateUser.getFirstname()) && !updateUser.getFirstname().isEmpty()){
-            userDao.updateFirstname(userInDatabase.get().getId(), updateUser.getFirstname());
+            updateFirstname(userInDatabase.get().getId(), updateUser.getFirstname());
             userInDatabase.get().setFirstname(updateUser.getFirstname());
         }
 
         if(!userInDatabase.get().getLastname().equals(updateUser.getLastname()) && !updateUser.getLastname().isEmpty()){
-            userDao.updateLastname(userInDatabase.get().getId(), updateUser.getLastname());
+            updateLastname(userInDatabase.get().getId(), updateUser.getLastname());
             userInDatabase.get().setLastname(updateUser.getLastname());
         }
 
         //todo : fix. update works one time only
         if(!userInDatabase.get().getEmail().equals(updateUser.getEmail()) && !updateUser.getEmail().isEmpty()) {
-            userDao.updateEmail(userInDatabase.get().getId(), updateUser.getEmail());
+            updateEmail(userInDatabase.get().getId(), updateUser.getEmail());
             userInDatabase.get().setEmail(updateUser.getEmail());
         }
 
         if(!userInDatabase.get().getPhoneNumber().equals(updateUser.getPhoneNumber()) && !updateUser.getPhoneNumber().isEmpty()) {
-            userDao.updatePhoneNumber(userInDatabase.get().getId(), updateUser.getPhoneNumber());
+            updatePhoneNumber(userInDatabase.get().getId(), updateUser.getPhoneNumber());
             userInDatabase.get().setPhoneNumber(updateUser.getPhoneNumber());
         }
 
         return new UserDTO().toUserDTO(userInDatabase);
     }
 
+    /****         Utils methods         **/
+
+    private Optional<User> findBy(String email){
+        return userDao.findBy(email);
+    }
+    private Optional<UserDTO> getProfil(String email){
+        return userDao.getUserProfil(email);
+    }
+    private void updateFirstname(Long id, String firstname){
+        userDao.updateFirstname(id, firstname);
+    }
+    private void updateLastname(Long id, String lastname){
+        userDao.updateLastname(id, lastname);
+    }
+    private void updateEmail(Long id, String email){
+        userDao.updateEmail(id, email);
+    }
+    private void updatePhoneNumber(Long id, String firstname){
+        userDao.updateFirstname(id, firstname);
+    }
     private  String getEmail (String token){
         return this.jwtService.extractUsername(token);
     }

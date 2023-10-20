@@ -20,7 +20,7 @@ public class AccountCustomizationDao {
 
     public Optional<AccountCustomizationResponse> getAccountCustomizationResponse(Long id) throws Exception {
         try{
-            return Optional.ofNullable(new AccountCustomizationResponse().toAccountCustomizationResponse(accountCustomizationJpaRepository.findAccountCustomizationBy(id)));
+            return Optional.ofNullable(new AccountCustomizationResponse().toAccountCustomizationResponse(getAccountCustomization(id)));
         }catch (Exception e){
             throw new Exception(e);
         }
@@ -28,7 +28,7 @@ public class AccountCustomizationDao {
 
     public Optional<AccountCustomization> getAccountCustomization(Long id) throws Exception {
         try{
-            return accountCustomizationJpaRepository.findAccountCustomizationBy(id);
+            return accountCustomizationJpaRepository.findAccountCustomization(id);
         }catch (Exception e){
             throw new Exception(e);
         }

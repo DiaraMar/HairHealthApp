@@ -1,5 +1,6 @@
 package com.kamikarow.hairCareProject.service;
 
+import com.kamikarow.hairCareProject.domain.file.File;
 import com.kamikarow.hairCareProject.exposition.config.JwtService;
 import com.kamikarow.hairCareProject.domain.diagnostic.Diagnostic;
 import com.kamikarow.hairCareProject.domain.file.FileInterface;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,28 +33,38 @@ public class FileService implements FileInterface {
 
         String email = getEmail(token);
 
-        User createdBy = new User().toUser(userDao.findByEmail(email));
+        User createdBy = new User().toUser(findBy(email));
 
         var idDiagnostic = fileRequest.getDiagnostic().getId();
 
         Diagnostic diagnostic = new Diagnostic();
+        //todo : check if problem
         diagnostic.setId(idDiagnostic);
-        System.out.println("IV");
-        System.out.println(diagnosticDao.owner(idDiagnostic));
-        diagnostic.setOwner(diagnosticDao.owner(idDiagnostic));
-        System.out.println("V");
+        diagnostic.setOwner(findOwnerOf(idDiagnostic));
 
         fileRequest.setDiagnostic(diagnostic);
 
         fileRequest.setCreatedBy(createdBy);
 
-        System.out.println("debbug service" +fileRequest.getTitle());
 
-        new FileResponse().toFileResponse(fileDao.save(fileRequest.toFile()));
+        new FileResponse().toFileResponse(save(fileRequest.toFile()));
         return null;
     }
 
+    /****         Utils methods         **/
 
+    private Optional<User> findBy(String email){
+      return userDao.findBy(email);
+    }
+
+    private User findOwnerOf(Long idDiagnostic){
+       return diagnosticDao.findOwnerOf(idDiagnostic);
+    }
+
+    private File save(File file){
+        return fileDao.save(file);
+
+    }
     private  String getEmail (String token){
         return this.jwtService.extractUsername(token);
     }

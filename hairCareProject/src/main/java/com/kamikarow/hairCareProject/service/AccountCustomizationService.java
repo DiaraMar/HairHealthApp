@@ -32,35 +32,51 @@ public class AccountCustomizationService implements AccountCustomizationInterfac
 
         Long id= getUserId(token);
 
-        return accountCustomizationDao.getAccountCustomizationResponse(id);
+        return getAccountCustomizationResponse(id);
     }
 
     @Override
     public AccountCustomizationResponse updateAccountCustomization(String token, AccountCustomizationResponse accountCustomizationResponse) throws Exception {
 
         Long userId = getUserId(token);
-        Optional<AccountCustomization> accountCustomizationInDatabase = accountCustomizationDao.getAccountCustomization(userId);
+        Optional<AccountCustomization> accountCustomizationInDatabase = getAccountCustomization(userId);
 
         if(!accountCustomizationInDatabase.get().isSms()==accountCustomizationResponse.isSms()){
-            accountCustomizationDao.updateSmsPreference(userId, accountCustomizationResponse.isSms());
+            updateSmsPreference(userId, accountCustomizationResponse.isSms());
             accountCustomizationInDatabase.get().setSms(accountCustomizationResponse.isSms());
         }
         if(!accountCustomizationInDatabase.get().isNewsletter()==accountCustomizationResponse.isNewsletter()){
-            accountCustomizationDao.updateNewsLetterPreference(userId, accountCustomizationResponse.isNewsletter());
+            updateNewsLetterPreference(userId, accountCustomizationResponse.isNewsletter());
             accountCustomizationInDatabase.get().setNewsletter(accountCustomizationResponse.isNewsletter());
         }
         AccountCustomization accountCustomization = new AccountCustomization().toAccountCustomization(accountCustomizationInDatabase);
 
-
         return new AccountCustomizationResponse().toAccountCustomizationResponse(accountCustomization);
     }
 
+
+    /****         Utils methods         **/
     private Long getUserId (String token){
         String email = getEmail(token);
-        return userDao.findByEmail(email).get().getId();
+        return userDao.findBy(email).get().getId();
     }
     private  String getEmail (String token){
         return this.jwtService.extractUsername(token);
+    }
+
+    private Optional<AccountCustomizationResponse> getAccountCustomizationResponse(Long id) throws Exception {
+        return accountCustomizationDao.getAccountCustomizationResponse(id);
+    }
+    private Optional<AccountCustomization> getAccountCustomization(Long userId) throws Exception {
+        return accountCustomizationDao.getAccountCustomization(userId);
+    }
+
+    private void updateSmsPreference(Long userId, boolean isSms){
+        accountCustomizationDao.updateSmsPreference(userId, isSms);
+    }
+
+    private void updateNewsLetterPreference(Long userId, boolean isNewsletter){
+        accountCustomizationDao.updateNewsLetterPreference(userId, isNewsletter);
     }
 
 

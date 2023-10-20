@@ -27,21 +27,28 @@ public class DiagnosticService implements DiagnosticInterface {
 
     @Override
     public Diagnostic save(DiagnosticRequest diagnosticRequest, String token) {
-        User client = new User().toUser(userDao.findByEmail(diagnosticRequest.getClient()));
-        User creator = new User().toUser(userDao.findByEmail(getEmail(token)));
-        return this.diagnosticDao.save(new DiagnosticRequest().toDiagnostic(diagnosticRequest, client, creator ));
-
-
+        User client = new User().toUser(findBy(diagnosticRequest.getClient()));
+        User creator = new User().toUser(findBy(getEmail(token)));
+        return save(new DiagnosticRequest().toDiagnostic(diagnosticRequest, client, creator ));
     }
 
     @Override
     public List<DiagnosticResponse> retrieveAllDiagnostics(String token) {
-        Optional<User> user = userDao.findByEmail(getEmail(token));
-        return new DiagnosticResponse().toListOfDiagnosticResponse(this.diagnosticDao.retrievesAll(user.get().getId()));
+        Optional<User> user = findBy(getEmail(token));
+        return new DiagnosticResponse().toListOfDiagnosticResponse(retrievesAll(user.get().getId()));
     }
 
+    /****         Utils methods         **/
+    private List<Diagnostic> retrievesAll(Long id){
+        return this.diagnosticDao.retrievesAll(id);
+    }
+    private Diagnostic save(Diagnostic diagnostic){
+        return  this.diagnosticDao.save(diagnostic);
+    }
     private  String getEmail (String token){
         return this.jwtService.extractUsername(token);
     }
-
+    private Optional<User> findBy(String email){
+        return userDao.findBy(email);
+    }
 }

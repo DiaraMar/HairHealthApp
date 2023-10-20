@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface AccountCustomizationJpaRepository  extends JpaRepository<AccountCustomization,Long> {
 
     @Query(value="select * from kkarowdb.account_customization a WHERE a.owner = :id",  nativeQuery = true)
-    Optional<AccountCustomization> findAccountCustomizationBy(@Param("id") Long userID);
+    Optional<AccountCustomization> findAccountCustomization(@Param("id") Long userID);
 
     @Modifying
     @Query(value = "UPDATE kkarowdb.account_customization SET sms = :sms WHERE id = :id", nativeQuery = true)

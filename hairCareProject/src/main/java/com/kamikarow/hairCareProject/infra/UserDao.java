@@ -13,7 +13,7 @@ import java.util.Optional;
 public class UserDao {
    private final UserJpaRepository userJpaRepository;
 
-    public Optional<User> findByEmail(String email){
+    public Optional<User> findBy(String email){
       return  userJpaRepository.findByEmail(email);
     }
 
@@ -24,7 +24,7 @@ public class UserDao {
 
 
     public Optional<UserDTO> getUserProfil(String email){
-        Optional<User> user = findByEmail(email);
+        Optional<User> user = findBy(email);
         return Optional.ofNullable(new UserDTO().toUserDTO(user));
 
     }
