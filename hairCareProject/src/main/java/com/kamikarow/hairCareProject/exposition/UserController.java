@@ -34,7 +34,7 @@ public class UserController {
 
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("/password/new")
+    @PatchMapping("/password/new")
     public ResponseEntity<AuthenticationResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
         try{
             return ResponseEntity.ok(authenticationService.resetPassword(resetPasswordRequest, getToken()));
@@ -51,6 +51,7 @@ public class UserController {
         logoutService.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/profil")
     public ResponseEntity<Optional<UserDTO>> getUserProfil() throws Exception {
         try{
@@ -60,6 +61,7 @@ public class UserController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @PatchMapping("/profil")
     public ResponseEntity<Optional<UserDTO>> updateUserProfil(@RequestBody UserDTO updatedProfil) throws Exception {
         System.out.println("debbug controller " + updatedProfil);

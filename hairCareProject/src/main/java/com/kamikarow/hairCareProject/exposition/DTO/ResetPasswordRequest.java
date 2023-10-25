@@ -16,8 +16,6 @@ import java.util.Optional;
 @NoArgsConstructor
 public class ResetPasswordRequest {
     @NotBlank
-    private String email;
-    @NotBlank
     private String oldPassword;
     @NotBlank
     private String newPassword;

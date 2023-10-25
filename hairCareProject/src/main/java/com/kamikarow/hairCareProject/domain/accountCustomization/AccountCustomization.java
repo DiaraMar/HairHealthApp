@@ -2,7 +2,6 @@ package com.kamikarow.hairCareProject.domain.accountCustomization;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kamikarow.hairCareProject.domain.user.User;
-import com.kamikarow.hairCareProject.exposition.DTO.AccountCustomizationResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -25,6 +25,7 @@ public class DiagnosticController {
     private final DiagnosticService diagnosticService;
     private final BearerTokenWrapper tokenWrapper;
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping
     public ResponseEntity<List<DiagnosticResponse>> retrieveAllDiagnostics() throws Exception {
         try{

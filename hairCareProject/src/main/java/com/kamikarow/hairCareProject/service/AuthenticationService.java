@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService implements AuthInterface {
+public class  AuthenticationService implements AuthInterface {
 
     private final UserDao userDao;
     private final AccountCustomizationDao accountCustomizationDao;
@@ -57,15 +57,16 @@ public class AuthenticationService implements AuthInterface {
         }
         String email = extractEmail(token);
 
-        if(resetPasswordRequest.getEmail()!=null && !resetPasswordRequest.getEmail().isEmpty()){
+/*        if(resetPasswordRequest.getEmail()!=null && !resetPasswordRequest.getEmail().isEmpty()){
             if(!resetPasswordRequest.getEmail().equalsIgnoreCase(email)){
                 throw new Unauthorized("Request unauthorized");
             }
-        }
-        if(authenticate(new UsernamePasswordAuthenticationToken(email, resetPasswordRequest.getOldPassword())).isAuthenticated()){
-            resetPasswordRequest.setEmail(email);
-        }
+        }*/
+       if(!authenticate(new UsernamePasswordAuthenticationToken(email, resetPasswordRequest.getOldPassword())).isAuthenticated()) {
+           throw new Unauthorized("Request unauthorized");
+       }
 
+       System.out.println("METHODDDDDDDDDDDDDDDD");
 
         User user = new ResetPasswordRequest().toUser(findBy(email), encodePassword(resetPasswordRequest.getNewPassword()), email);
         resetPassword(user.getId(), user.getPassword());

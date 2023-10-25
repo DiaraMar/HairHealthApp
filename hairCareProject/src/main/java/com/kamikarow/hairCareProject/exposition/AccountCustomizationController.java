@@ -23,6 +23,7 @@ public class AccountCustomizationController {
     private final AccountCustomizationService accountCustomizationService;
     private final BearerTokenWrapper tokenWrapper;
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping
     public ResponseEntity<Optional<AccountCustomizationResponse>> getAccountCustomization() throws Exception {
         try{
@@ -32,7 +33,7 @@ public class AccountCustomizationController {
             throw new Exception(e);
         }
     }
-
+    @CrossOrigin(origins = "http://localhost:4200")
     @PatchMapping
     public ResponseEntity<Optional<AccountCustomizationResponse>> updateAccount(@RequestBody AccountCustomizationResponse accountCustomizationResponse) throws Exception {
         try{
