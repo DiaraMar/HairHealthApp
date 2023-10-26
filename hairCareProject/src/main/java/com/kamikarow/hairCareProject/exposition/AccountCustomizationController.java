@@ -28,7 +28,7 @@ public class AccountCustomizationController {
     public ResponseEntity<Optional<AccountCustomizationResponse>> getAccountCustomization() throws Exception {
         try{
             String token = getToken ();
-            return ResponseEntity.ok(this.accountCustomizationService.getAccountCustomization( token));
+            return ResponseEntity.ok(Optional.ofNullable(new AccountCustomizationResponse().toAccountCustomizationResponse(this.accountCustomizationService.getAccountCustomization(token))));
         }catch(Exception e){
             throw new Exception(e);
         }
@@ -38,7 +38,7 @@ public class AccountCustomizationController {
     public ResponseEntity<Optional<AccountCustomizationResponse>> updateAccount(@RequestBody AccountCustomizationResponse accountCustomizationResponse) throws Exception {
         try{
             String token = getToken ();
-            return ResponseEntity.ok(Optional.ofNullable(this.accountCustomizationService.updateAccountCustomization(token, accountCustomizationResponse)));
+            return ResponseEntity.ok(Optional.ofNullable(new AccountCustomizationResponse().toAccountCustomizationResponse(this.accountCustomizationService.updateAccountCustomization(token, accountCustomizationResponse.toAccountCustomization()))));
         }catch(Exception e){
             throw new Exception(e);
         }

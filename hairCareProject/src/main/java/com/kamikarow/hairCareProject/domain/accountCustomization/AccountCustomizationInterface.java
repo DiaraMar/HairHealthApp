@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface AccountCustomizationInterface {
 
-    public Optional<AccountCustomizationResponse> getAccountCustomization( String token) throws Exception;
-    public AccountCustomizationResponse updateAccountCustomization(String token, AccountCustomizationResponse AccountCustomizationResponse) throws Exception;
+    public Optional<AccountCustomization> getAccountCustomization( String token) throws Exception;
+    public AccountCustomization updateAccountCustomization(String token, AccountCustomization AccountCustomization) throws Exception;
 }

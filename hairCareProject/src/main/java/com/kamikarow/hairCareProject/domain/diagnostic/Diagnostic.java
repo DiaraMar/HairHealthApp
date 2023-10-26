@@ -36,6 +36,7 @@ public class Diagnostic {
     private LocalDateTime createdOn;
 
     private String report;
+    private String title;
 
     private String conclusion;
 

@@ -26,6 +26,8 @@ public class DiagnosticRequest {
     private String report;
     @NotBlank
     private String conclusion;
+    @NotBlank
+    private String title;
     private File file;
 
     public Diagnostic toDiagnostic(DiagnosticRequest diagnosticRequest, User client, User creator){
@@ -36,6 +38,18 @@ public class DiagnosticRequest {
                 .report(diagnosticRequest.report)
                 .conclusion(diagnosticRequest.conclusion)
                 .file(diagnosticRequest.file)
+                .title(diagnosticRequest.title)
+                .build();
+
+    }
+
+    public Diagnostic toDiagnostic(){
+        return Diagnostic.builder()
+                .createdOn(LocalDateTime.now())
+                .report(report)
+                .conclusion(conclusion)
+                .file(file)
+                .title(title)
                 .build();
 
     }

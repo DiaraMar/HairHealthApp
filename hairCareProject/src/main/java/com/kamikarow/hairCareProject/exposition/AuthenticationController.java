@@ -27,7 +27,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
         try{
-            return ResponseEntity.ok(authenticationService.register(registerRequest));
+            return ResponseEntity.ok(new AuthenticationResponse().toAuthenticationResponse(authenticationService.register(registerRequest.toUser())));
         }catch (EmailAlreadyExistsException emailAlreadyExistsException){
             throw new EmailAlreadyExistsException("The username is already register");
         }
@@ -37,7 +37,7 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@Valid @RequestBody AuthenticationRequest authenticationRequest) throws AuthenticationException {
         try{
-            return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));  }
+            return ResponseEntity.ok(new AuthenticationResponse().toAuthenticationResponse(authenticationService.authenticate(authenticationRequest.toUser())));  }
         catch (AuthenticationException authenticationException){
             throw new AuthenticationException("The username or the password is wrong");
         }

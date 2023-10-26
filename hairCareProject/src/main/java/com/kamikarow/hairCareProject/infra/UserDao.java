@@ -23,9 +23,9 @@ public class UserDao {
     }
 
 
-    public Optional<UserDTO> getUserProfil(String email){
+    public Optional<User> getUserProfil(String email){
         Optional<User> user = findBy(email);
-        return Optional.ofNullable(new UserDTO().toUserDTO(user));
+        return user;
 
     }
 

@@ -33,6 +33,13 @@ public class AccountCustomizationResponse {
                 .build();
     }
 
+    public AccountCustomization toAccountCustomization(){
+        return AccountCustomization.builder()
+                .sms(isSms())
+                .newsletter(isNewsletter())
+                .build();
+    }
+
 
 
 }

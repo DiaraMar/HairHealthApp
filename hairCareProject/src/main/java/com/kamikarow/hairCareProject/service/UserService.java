@@ -19,22 +19,22 @@ public class UserService implements UserInterface {
 
 
     @Override
-    public Optional<UserDTO> getUserProfil(String token) {
+    public Optional<User> getUserProfil(String token) {
         String email = getEmail(token);
         return getProfil(email);
     }
 
     @Override
-    public UserDTO updateUserProfil(String token, UserDTO userDTO) {
+    public User updateUserProfil(String token, User user) {
 
-        System.out.println("debbug service userDto " + userDTO);
+        System.out.println("debbug service userDto " + user);
 
         String email = getEmail(token);
 
         //get userInDatabase
         Optional<User> userInDatabase = findBy(email);
         //toUser
-        User updateUser = new UserDTO().toUser(userInDatabase,userDTO);
+        User updateUser = new UserDTO().toUser(userInDatabase,user);
         System.out.println("debbug service updateUser " + updateUser);
 
         //saveUser
@@ -60,7 +60,7 @@ public class UserService implements UserInterface {
             userInDatabase.get().setPhoneNumber(updateUser.getPhoneNumber());
         }
 
-        return new UserDTO().toUserDTO(userInDatabase);
+        return userInDatabase.get();
     }
 
     /****         Utils methods         **/
@@ -68,7 +68,7 @@ public class UserService implements UserInterface {
     private Optional<User> findBy(String email){
         return userDao.findBy(email);
     }
-    private Optional<UserDTO> getProfil(String email){
+    private Optional<User> getProfil(String email){
         return userDao.getUserProfil(email);
     }
     private void updateFirstname(Long id, String firstname){

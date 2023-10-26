@@ -27,7 +27,7 @@ public class RegisterRequest {
 
 
 
-    public User toUser(RegisterRequest registerRequest, String passwordEncoded){
+    public User formatUser(User registerRequest, String passwordEncoded){
 
         return   User.builder()
                 .firstname(registerRequest.getFirstname())
@@ -35,6 +35,18 @@ public class RegisterRequest {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoded)
                 .phoneNumber(registerRequest.getPhoneNumber())
+                .role(Role.USER)
+                .build();
+    }
+
+
+    public User toUser(){
+        return User.builder()
+                .firstname(getFirstname())
+                .lastname(getLastname())
+                .email(getEmail())
+                .password(getPassword())
+                .phoneNumber(getPhoneNumber())
                 .role(Role.USER)
                 .build();
     }

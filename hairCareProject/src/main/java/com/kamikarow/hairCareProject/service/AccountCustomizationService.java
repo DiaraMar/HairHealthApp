@@ -24,7 +24,7 @@ public class AccountCustomizationService implements AccountCustomizationInterfac
 
 
     @Override
-    public Optional<AccountCustomizationResponse> getAccountCustomization( String token) throws Exception {
+    public Optional<AccountCustomization> getAccountCustomization( String token) throws Exception {
 
         if(token ==null || token.isEmpty())
             throw new Unauthorized("You are not authorized to perform this action");
@@ -32,11 +32,11 @@ public class AccountCustomizationService implements AccountCustomizationInterfac
 
         Long id= getUserId(token);
 
-        return getAccountCustomizationResponse(id);
+        return getAccountCustomization(id);
     }
 
     @Override
-    public AccountCustomizationResponse updateAccountCustomization(String token, AccountCustomizationResponse accountCustomizationResponse) throws Exception {
+    public AccountCustomization updateAccountCustomization(String token, AccountCustomization accountCustomizationResponse) throws Exception {
 
         Long userId = getUserId(token);
         Optional<AccountCustomization> accountCustomizationInDatabase = getAccountCustomization(userId);
@@ -51,7 +51,7 @@ public class AccountCustomizationService implements AccountCustomizationInterfac
         }
         AccountCustomization accountCustomization = new AccountCustomization().toAccountCustomization(accountCustomizationInDatabase);
 
-        return new AccountCustomizationResponse().toAccountCustomizationResponse(accountCustomization);
+        return accountCustomization;
     }
 
 
@@ -64,11 +64,8 @@ public class AccountCustomizationService implements AccountCustomizationInterfac
         return this.jwtService.extractUsername(token);
     }
 
-    private Optional<AccountCustomizationResponse> getAccountCustomizationResponse(Long id) throws Exception {
-        return accountCustomizationDao.getAccountCustomizationResponse(id);
-    }
-    private Optional<AccountCustomization> getAccountCustomization(Long userId) throws Exception {
-        return accountCustomizationDao.getAccountCustomization(userId);
+    private Optional<AccountCustomization> getAccountCustomization(Long id) throws Exception {
+        return accountCustomizationDao.getAccountCustomization(id);
     }
 
     private void updateSmsPreference(Long userId, boolean isSms){

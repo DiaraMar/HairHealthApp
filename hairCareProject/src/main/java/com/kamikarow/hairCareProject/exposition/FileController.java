@@ -2,6 +2,7 @@ package com.kamikarow.hairCareProject.exposition;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kamikarow.hairCareProject.domain.file.File;
 import com.kamikarow.hairCareProject.exposition.DTO.DiagnosticResponse;
 import com.kamikarow.hairCareProject.exposition.DTO.FileRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.FileResponse;
@@ -36,7 +37,7 @@ public class FileController {
             String token = getToken ();
             System.out.println("test file endpoint");
             FileRequest fileRequest = new FileRequest().toFileRequest(diagnostic, title,fileExtension, document);
-            return ResponseEntity.ok(this.fileService.save(fileRequest, token));
+            return ResponseEntity.ok(new FileResponse().toFileResponse(this.fileService.save(fileRequest.toFile(), token)));
 
         }catch(Exception e){
             throw new Exception(e);

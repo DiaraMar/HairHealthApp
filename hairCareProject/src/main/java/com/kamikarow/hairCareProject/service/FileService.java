@@ -29,26 +29,21 @@ public class FileService implements FileInterface {
     private final JwtService jwtService;
 
     @Override
-    public FileResponse save(FileRequest fileRequest, String token) {
+    public File save(File fileRequest, String token) {
 
         String email = getEmail(token);
-
         User createdBy = new User().toUser(findBy(email));
 
         var idDiagnostic = fileRequest.getDiagnostic().getId();
-
         Diagnostic diagnostic = new Diagnostic();
         //todo : check if problem
         diagnostic.setId(idDiagnostic);
         diagnostic.setOwner(findOwnerOf(idDiagnostic));
 
         fileRequest.setDiagnostic(diagnostic);
-
         fileRequest.setCreatedBy(createdBy);
 
-
-        new FileResponse().toFileResponse(save(fileRequest.toFile()));
-        return null;
+        return save(fileRequest);
     }
 
     /****         Utils methods         **/

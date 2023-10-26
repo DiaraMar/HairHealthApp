@@ -1,5 +1,6 @@
 package com.kamikarow.hairCareProject.exposition;
 
+import com.kamikarow.hairCareProject.domain.user.User;
 import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationResponse;
 import com.kamikarow.hairCareProject.exposition.DTO.ResetPasswordRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.UserDTO;
@@ -37,6 +38,7 @@ public class UserController {
     @PatchMapping("/password/new")
     public ResponseEntity<AuthenticationResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
         try{
+            System.out.println("testtttt");
             return ResponseEntity.ok(authenticationService.resetPassword(resetPasswordRequest, getToken()));
         }catch (EmailAlreadyExistsException emailAlreadyExistsException){
             throw new EmailAlreadyExistsException("The username is already register");
@@ -45,7 +47,6 @@ public class UserController {
 
     @PostMapping("/disconnection")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("debbug");
         System.out.println("HttpServletRequest request " +  request);
         System.out.println("HttpServletResponse response " +  response);
         logoutService.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
@@ -55,7 +56,7 @@ public class UserController {
     @GetMapping("/profil")
     public ResponseEntity<Optional<UserDTO>> getUserProfil() throws Exception {
         try{
-            return ResponseEntity.ok(userService.getUserProfil(getToken()));
+            return ResponseEntity.ok(Optional.ofNullable(new UserDTO().toUserDTO(userService.getUserProfil(getToken()))));
         }catch (Exception e){
             throw new Exception(e);
         }
@@ -63,10 +64,10 @@ public class UserController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @PatchMapping("/profil")
-    public ResponseEntity<Optional<UserDTO>> updateUserProfil(@RequestBody UserDTO updatedProfil) throws Exception {
+    public ResponseEntity<UserDTO> updateUserProfil(@RequestBody UserDTO updatedProfil) throws Exception {
         System.out.println("debbug controller " + updatedProfil);
         try{
-            return ResponseEntity.ok(Optional.ofNullable(userService.updateUserProfil(getToken(), updatedProfil)));
+            return ResponseEntity.ok(new UserDTO().toUserDTO(userService.updateUserProfil(getToken(), updatedProfil.toUser())));
         }catch (Exception e){
             throw new Exception(e);
         }

@@ -18,9 +18,9 @@ public class AccountCustomizationDao {
         return accountCustomizationJpaRepository.save(accountCustomization);
     }
 
-    public Optional<AccountCustomizationResponse> getAccountCustomizationResponse(Long id) throws Exception {
+    public Optional<AccountCustomization> getAccountCustomizationResponse(Long id) throws Exception {
         try{
-            return Optional.ofNullable(new AccountCustomizationResponse().toAccountCustomizationResponse(getAccountCustomization(id)));
+            return getAccountCustomization(id);
         }catch (Exception e){
             throw new Exception(e);
         }

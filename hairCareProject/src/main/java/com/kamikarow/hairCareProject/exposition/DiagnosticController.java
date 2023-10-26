@@ -31,7 +31,7 @@ public class DiagnosticController {
         try{
             System.out.println("controller retrieve all diagnostics");
             String token = getToken ();
-            return ResponseEntity.ok(this.diagnosticService.retrieveAllDiagnostics(token));
+            return ResponseEntity.ok(new DiagnosticResponse().toListOfDiagnosticResponse(this.diagnosticService.retrieveAllDiagnostics(token)));
         }catch(Exception e){
             throw new Exception(e);
         }
@@ -40,10 +40,10 @@ public class DiagnosticController {
 
     @PreAuthorize("hasRole('SUB_CONTRACTOR')")
     @PostMapping //todo role subcontractor
-    public ResponseEntity<Optional<Diagnostic>> saveDiagnostic(@Valid @RequestBody DiagnosticRequest diagnosticRequest) throws Exception {
+    public ResponseEntity<Optional<DiagnosticResponse>> saveDiagnostic(@Valid @RequestBody DiagnosticRequest diagnosticRequest) throws Exception {
         try{
             String token = getToken ();
-            return ResponseEntity.ok(Optional.ofNullable(this.diagnosticService.save(diagnosticRequest, token)));
+            return ResponseEntity.ok(Optional.ofNullable(new DiagnosticResponse().toDiagnosticResponse(this.diagnosticService.save(diagnosticRequest.toDiagnostic(), token, diagnosticRequest.getClient()))));
         }catch(Exception e){
             throw new Exception(e);
         }

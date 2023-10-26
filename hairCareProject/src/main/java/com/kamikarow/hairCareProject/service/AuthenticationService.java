@@ -27,27 +27,25 @@ public class  AuthenticationService implements AuthInterface {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest registerRequest) {
+    public String register(User registerRequest) {
 
   /**
    * if(!userDao.findByEmail(registerRequest.getEmail()).isEmpty() || userDao.findByEmail(registerRequest.getEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("Username already in database");} replaced by @column(unique(true)*/
-        var user = new RegisterRequest().toUser(registerRequest, encodePassword(registerRequest.getPassword()));
+        var user = new RegisterRequest().formatUser(registerRequest, encodePassword(registerRequest.getPassword()));
         user = save(user);
 
         var accountCustomization = new AccountCustomization(user);
         save(accountCustomization);
 
-        var jwtToken = generateToken(user);
-        return buildToken(jwtToken);
+        return generateToken(user);
     }
-    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
+    public String authenticate(User authenticationRequest) {
         authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
         var user = findBy(authenticationRequest.getEmail())
                 .orElseThrow();
 
-        var jwtToken = generateToken(user);
-        return buildToken(jwtToken);
+        return generateToken(user);
     }
 
     public AuthenticationResponse resetPassword(ResetPasswordRequest resetPasswordRequest, String token) {
@@ -83,6 +81,7 @@ public class  AuthenticationService implements AuthInterface {
     private AuthenticationResponse buildToken(String token){
         return AuthenticationResponse.builder().token(token).build();
     }
+
 
 
 

@@ -28,13 +28,29 @@ public class UserDTO {
                 .phoneNumber(user.getPhoneNumber())
                 .build();
     }
+    public UserDTO toUserDTO(User user){
+        return UserDTO.builder()
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .build();
+    }
 
-    public User toUser(Optional<User> optionalUser, UserDTO userDTO){
+    public User toUser(){
+      return   User.builder()
+              .firstname(firstname)
+              .lastname(lastname)
+              .email(email)
+              .phoneNumber(phoneNumber)
+              .build();
+    }
+    public User toUser(Optional<User> optionalUser, User updatedUser){
         var user = optionalUser.get();
-        var userFirstname = isNullOrEmpty(userDTO.getFirstname())?user.getFirstname():userDTO.getFirstname();
-        var userLastname = isNullOrEmpty(userDTO.getLastname())?user.getLastname():userDTO.getLastname();
-        var userEmail = isNullOrEmpty(userDTO.getEmail())?user.getEmail():userDTO.getEmail();
-        var userPhoneNumber = isNullOrEmpty(userDTO.getPhoneNumber())?user.getPhoneNumber():userDTO.getPhoneNumber();
+        var userFirstname = isNullOrEmpty(updatedUser.getFirstname())?user.getFirstname():updatedUser.getFirstname();
+        var userLastname = isNullOrEmpty(updatedUser.getLastname())?user.getLastname():updatedUser.getLastname();
+        var userEmail = isNullOrEmpty(updatedUser.getEmail())?user.getEmail():updatedUser.getEmail();
+        var userPhoneNumber = isNullOrEmpty(updatedUser.getPhoneNumber())?user.getPhoneNumber():updatedUser.getPhoneNumber();
 
         return User.builder()
                 .id(user.getId())

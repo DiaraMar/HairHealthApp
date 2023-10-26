@@ -1,13 +1,12 @@
 package com.kamikarow.hairCareProject.domain.auth;
 
-import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationRequest;
-import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationResponse;
-import com.kamikarow.hairCareProject.exposition.DTO.RegisterRequest;
+import com.kamikarow.hairCareProject.domain.user.User;
+
 
 public interface AuthInterface {
 
-    public AuthenticationResponse register(RegisterRequest registerRequest);
-    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest);
+    public String register(User registerRequest);
+    public String authenticate(User authenticationRequest);
 
     //updateAccount
 }

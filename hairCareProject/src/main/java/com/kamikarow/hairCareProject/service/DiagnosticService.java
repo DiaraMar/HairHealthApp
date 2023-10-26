@@ -19,23 +19,25 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class DiagnosticService implements DiagnosticInterface {
-    private static final Logger logger = LogManager.getLogger(DiagnosticService.class);
     private final DiagnosticDao diagnosticDao;
     private final UserDao userDao;
     private final JwtService jwtService;
 
 
     @Override
-    public Diagnostic save(DiagnosticRequest diagnosticRequest, String token) {
-        User client = new User().toUser(findBy(diagnosticRequest.getClient()));
+    public Diagnostic save(Diagnostic diagnosticRequest, String token, String usernameClient) {
+        User client = new User().toUser(findBy(usernameClient));
         User creator = new User().toUser(findBy(getEmail(token)));
-        return save(new DiagnosticRequest().toDiagnostic(diagnosticRequest, client, creator ));
+        diagnosticRequest.setOwner(client);
+        diagnosticRequest.setCreatedBy(creator);
+
+        return save(diagnosticRequest);
     }
 
     @Override
-    public List<DiagnosticResponse> retrieveAllDiagnostics(String token) {
+    public List<Diagnostic> retrieveAllDiagnostics(String token) {
         Optional<User> user = findBy(getEmail(token));
-        return new DiagnosticResponse().toListOfDiagnosticResponse(retrievesAll(user.get().getId()));
+        return retrievesAll(user.get().getId());
     }
 
     /****         Utils methods         **/
