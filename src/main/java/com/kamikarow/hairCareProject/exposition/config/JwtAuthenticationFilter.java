@@ -73,8 +73,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         final String jwtToken;
         jwtToken = authHeader.substring(7);
-        //try .split(" ")[1].trim();
-
 
         /** ² userDetailService take username as argument,
          *     username is stored in token and not directly accessible

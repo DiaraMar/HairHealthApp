@@ -32,7 +32,7 @@ public class StageRequest {
         return Stage
                 .builder()
                 .title(stageRequest.getTitle())
-                .description(stageRequest.description)
+                .description(stageRequest.getDescription())
                 .build();
     }
 

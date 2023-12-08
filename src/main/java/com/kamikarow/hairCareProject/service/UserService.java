@@ -5,6 +5,7 @@ import com.kamikarow.hairCareProject.domain.user.User;
 import com.kamikarow.hairCareProject.domain.user.UserInterface;
 import com.kamikarow.hairCareProject.exposition.DTO.UserResponse;
 import com.kamikarow.hairCareProject.infra.UserDao;
+import com.kamikarow.hairCareProject.utility.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,9 @@ public class UserService implements UserInterface {
     @Override
     public Optional<User> getUserProfil(String token) {
         String email = getEmail(token);
+        if(email == null)
+        throw new UnauthorizedException("The client must authenticate itself to get the requested response");
+
         return getProfil(email);
     }
 
@@ -28,8 +32,14 @@ public class UserService implements UserInterface {
     public User updateUserProfil(String token, User user) {
 
         String email = getEmail(token);
+        if(email == null)
+            throw new UnauthorizedException("The client must authenticate itself to get the requested response");
+
 
         Optional<User> userInDatabase = findBy(email);
+        if(userInDatabase.isEmpty())
+            throw new UnauthorizedException("The client must authenticate itself to get the requested response");
+
         User updateUser = new UserResponse().toUser(userInDatabase,user);
 
         if(!userInDatabase.get().getFirstname().equals(updateUser.getFirstname()) && !updateUser.getFirstname().isEmpty()){

@@ -18,8 +18,6 @@ public class DiagnosticDao {
     }
 
     public User findOwnerOf(Long idDiagnostic){
-        System.out.println("dao");
-        //todo recuperation user
        return this.diagnosticJpaRepository.findById(idDiagnostic).get().getOwner();
     }
 

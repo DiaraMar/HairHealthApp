@@ -5,6 +5,8 @@ import com.kamikarow.hairCareProject.exposition.DTO.DiagnosticRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.DiagnosticResponse;
 import com.kamikarow.hairCareProject.service.DiagnosticService;
 import com.kamikarow.hairCareProject.utility.BearerTokenWrapper;
+import com.kamikarow.hairCareProject.utility.exception.RessourceNotFoundException;
+import com.kamikarow.hairCareProject.utility.exception.UnauthorizedException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -28,32 +30,47 @@ public class DiagnosticController {
 
     @GetMapping
     public ResponseEntity<List<DiagnosticResponse>> retrieveAllDiagnostics() throws Exception {
-        try{
-            String token = getToken ();
-            return ResponseEntity.ok(new DiagnosticResponse().toListOfDiagnosticResponse(this.diagnosticService.retrieveAllDiagnostics(token)));
-        }catch(Exception e){
-            throw new Exception(e);
+        try {
+            String token = getToken();
+            return ResponseEntity.ok(new DiagnosticResponse().toListOfDiagnosticResponse(retrieveAllDiagnostics(token)));
+        } catch (UnauthorizedException unauthorizedException) {
+            throw  unauthorizedException;
+        }
+        catch (Exception e) {
+            throw e;
         }
     }
 
     @PreAuthorize("hasRole('SUB_CONTRACTOR')")
     @PostMapping //todo role subcontractor
     public ResponseEntity<Optional<DiagnosticResponse>> saveDiagnostic(@Valid @RequestBody DiagnosticRequest diagnosticRequest) throws Exception {
-        try{
-            String token = getToken ();
-            return ResponseEntity.ok(Optional.ofNullable(new DiagnosticResponse().toDiagnosticResponse(this.diagnosticService.save(diagnosticRequest.toDiagnostic(), token, diagnosticRequest.getClient()))));
-        }catch(Exception e){
-            throw new Exception(e);
+        try {
+            String token = getToken();
+            return ResponseEntity.ok(Optional.ofNullable(new DiagnosticResponse().toDiagnosticResponse(save(diagnosticRequest.toDiagnostic(), token, diagnosticRequest.getClient()))));
+        } catch (UnauthorizedException | RessourceNotFoundException exception) {
+            throw  exception;
+        } catch (Exception e) {
+            throw e;
         }
     }
 
+    /** Utils Methods **/
 
-    private String getToken () throws Exception {
-        try{
-            return tokenWrapper.getToken();
-        }
-        catch (Exception e){
-            throw new Exception(e);
-        }
+    private List<Diagnostic> retrieveAllDiagnostics(String token) {
+        return this.diagnosticService.retrieveAllDiagnostics(token);
+    }
+
+    private Diagnostic save(Diagnostic diagnosticRequest, String token, String usernameClient) {
+        return (this.diagnosticService.save(diagnosticRequest, token, usernameClient));
+    }
+
+
+
+        private String getToken () {
+        String token =  tokenWrapper.getToken();
+
+        if(token.isEmpty())
+            throw new UnauthorizedException("");
+        return token;
     }
 }

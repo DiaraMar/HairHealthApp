@@ -6,6 +6,7 @@ import com.kamikarow.hairCareProject.domain.routine.Routine;
 import com.kamikarow.hairCareProject.domain.user.User;
 import com.kamikarow.hairCareProject.exposition.config.JwtService;
 import com.kamikarow.hairCareProject.infra.CommentDao;
+import com.kamikarow.hairCareProject.utility.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,28 +26,40 @@ public class CommentService implements CommentInterface {
     @Override
     public Comment addComment(Comment comment, Long routineId, String token) {
 
-        Routine routine = findRoutine(routineId);
+        if(!isValidContent(comment.getContent()))
+            throw new BadRequestException("Cannot not process the request due to something that is perceived to be a client error");//todo overide by this one
+
         Optional<User> user = getUser(token);
-        if(routine!= null && routine.isVisible() && isValidContent(comment.getContent()) && user.get().getId() != routine.getCreatedBy().getId()){
+        if(user.isEmpty())
+            throw new UnauthorizedException("The client must authenticate itself to get the requested response");//todo overide by this one
+
+        Routine routine = findRoutine(routineId);
+        if(routine==null)
+            throw new RessourceNotFoundException("Cannot find the requested resource"); //todo overide by this one
+
+        if(!routine.isVisible())
+            throw new AccessRightsException("The client does not have access rights to the content");
+
+        if(user.get().getId() == routine.getCreatedBy().getId())
+            throw new NotAllowedException("Method not allowed");
 
             comment.setCreatedBy(user.orElseThrow());
             comment.setRoutine(routine);
             comment.setCreatedOn(LocalDateTime.now());
             comment = save(comment);
 
-        }
-
         return comment;
     }
 
     @Override
     public void deleteComment(Long commentId, String token) {
-        Comment comment = findCommentByCommentId(commentId);
+        Comment comment = findCommentByCommentId(commentId); //todo throw error if comment is not found
         Optional<User> user = getUser(token);
-        if(user.get().getId() == comment.getCreatedBy().getId()){
+        if(user.isEmpty())
+            throw new UnauthorizedException("The client must authenticate itself to perform request");//todo overide by this one
+        if(user.get().getId() != comment.getCreatedBy().getId())
+            throw new NotAllowedException("Method not allowed");
             delete(comment);
-        }
-
     }
 
 

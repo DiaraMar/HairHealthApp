@@ -45,7 +45,6 @@ public class JwtAuthenticationFilterService extends OncePerRequestFilter {
      */
     private final UserDetailsService userDetailsService;
 
-
     /**
      * DoFilterInternal method
      *

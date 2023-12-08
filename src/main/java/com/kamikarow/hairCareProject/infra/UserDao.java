@@ -17,7 +17,6 @@ public class UserDao {
     }
 
     public User save(User user){
-        System.out.println("debbug infra user" + user);
         return userJpaRepository.save(user);
     }
 
@@ -51,7 +50,6 @@ public class UserDao {
 
     @Transactional
     public void resetPassword(Long id, String newPassword){
-        System.out.println("debbug reset password");
         userJpaRepository.updatePassword(id, newPassword);
     }
 

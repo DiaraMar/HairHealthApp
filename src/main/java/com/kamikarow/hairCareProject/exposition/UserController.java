@@ -7,7 +7,10 @@ import com.kamikarow.hairCareProject.service.AuthenticationService;
 import com.kamikarow.hairCareProject.service.LogoutService;
 import com.kamikarow.hairCareProject.service.UserService;
 import com.kamikarow.hairCareProject.utility.BearerTokenWrapper;
-import com.kamikarow.hairCareProject.utility.exception.EmailAlreadyExistsException;
+import com.kamikarow.hairCareProject.utility.exception.BadRequestException;
+import com.kamikarow.hairCareProject.utility.exception.ConflictException;
+import com.kamikarow.hairCareProject.utility.exception.InternalServerError;
+import com.kamikarow.hairCareProject.utility.exception.UnauthorizedException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -38,8 +41,11 @@ public class UserController {
     public ResponseEntity<AuthenticationResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
         try{
             return ResponseEntity.ok(authenticationService.resetPassword(resetPasswordRequest, getToken()));
-        }catch (EmailAlreadyExistsException emailAlreadyExistsException){
-            throw new EmailAlreadyExistsException("The username is already register");
+        }catch(BadRequestException | UnauthorizedException | InternalServerError exception){
+            throw exception;
+        }
+        catch (ConflictException conflictException){
+            throw conflictException;
         }
     }
 
@@ -52,8 +58,11 @@ public class UserController {
     public ResponseEntity<Optional<UserResponse>> getUserProfil() throws Exception {
         try{
             return ResponseEntity.ok(Optional.ofNullable(new UserResponse().toUserDTO(userService.getUserProfil(getToken()))));
-        }catch (Exception e){
-            throw new Exception(e);
+        }catch(UnauthorizedException unauthorizedException){
+            throw unauthorizedException;
+        }
+        catch (Exception e){
+            throw e;
         }
     }
 
@@ -61,15 +70,20 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUserProfil(@RequestBody UserResponse updatedProfil) throws Exception {
         try{
             return ResponseEntity.ok(new UserResponse().toUserDTO(userService.updateUserProfil(getToken(), updatedProfil.toUser())));
+        }catch(UnauthorizedException unauthorizedException){
+            throw unauthorizedException;
         }catch (Exception e){
-            throw new Exception(e);
+            throw e;
         }
     }
 
-    private String getToken(){
-        return tokenWrapper.getToken();
-    }
+    private String getToken () {
+        String token =  tokenWrapper.getToken();
 
+        if(token.isEmpty())
+            throw new UnauthorizedException("");
+        return token;
+    }
 
 
 }

@@ -23,12 +23,11 @@ public class RoutineDao {
     }
 
     public Optional<Routine> findBy(Long routineId){
-        System.out.println("debbug E + ID " + routineId);
         return this.routineJpaRepository.findById(routineId);
     }
 
-    public void update(Routine routine){
-        save(routine);
+    public Routine update(Routine routine){
+        return save(routine);
     }
 
     public void delete(Routine routine){

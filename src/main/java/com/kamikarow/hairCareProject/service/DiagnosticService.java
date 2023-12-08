@@ -8,6 +8,8 @@ import com.kamikarow.hairCareProject.exposition.DTO.DiagnosticRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.DiagnosticResponse;
 import com.kamikarow.hairCareProject.infra.DiagnosticDao;
 import com.kamikarow.hairCareProject.infra.UserDao;
+import com.kamikarow.hairCareProject.utility.exception.RessourceNotFoundException;
+import com.kamikarow.hairCareProject.utility.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,8 +29,15 @@ public class DiagnosticService implements DiagnosticInterface {
 
     @Override
     public Diagnostic save(Diagnostic diagnosticRequest, String token, String usernameClient) {
-        User client = new User().toUser(findBy(usernameClient));
         User creator = new User().toUser(findBy(getEmail(token)));
+        if(creator==null){
+            throw new UnauthorizedException("The client must authenticate itself to get the requested response");
+        }
+
+        User client = new User().toUser(findBy(usernameClient));
+        if(client==null){
+            throw new RessourceNotFoundException("Cannot find the requested client");
+        }
         diagnosticRequest.setOwner(client);
         diagnosticRequest.setCreatedBy(creator);
 
@@ -38,11 +47,13 @@ public class DiagnosticService implements DiagnosticInterface {
     @Override
     public List<Diagnostic> retrieveAllDiagnostics(String token) {
         Optional<User> user = findBy(getEmail(token));
+        if(user==null){
+            throw new UnauthorizedException("The client must authenticate itself to get the requested response");
+        }
         return retrievesAll(user.get().getId());
     }
 
     /****         Utils methods         **/
-
     private List<Diagnostic> retrievesAll(Long id){
         return this.diagnosticDao.retrievesAll(id);
     }

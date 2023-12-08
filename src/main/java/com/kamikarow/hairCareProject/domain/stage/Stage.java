@@ -2,11 +2,8 @@ package com.kamikarow.hairCareProject.domain.stage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kamikarow.hairCareProject.domain.routine.Routine;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Null;
 import lombok.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Builder
@@ -23,6 +20,7 @@ public class Stage {
     //todo add order
 
     private String title;
+    @Column(length = 2000)
     private String description;
     private LocalDateTime createdOn;
 

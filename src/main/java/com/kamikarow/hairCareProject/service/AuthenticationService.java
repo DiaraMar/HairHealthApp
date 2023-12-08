@@ -5,7 +5,10 @@ import com.kamikarow.hairCareProject.exposition.config.JwtService;
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
 import com.kamikarow.hairCareProject.domain.auth.AuthInterface;
 import com.kamikarow.hairCareProject.domain.user.User;
-import com.kamikarow.hairCareProject.utility.exception.Unauthorized;
+import com.kamikarow.hairCareProject.utility.exception.BadRequestException;
+import com.kamikarow.hairCareProject.utility.exception.ConflictException;
+import com.kamikarow.hairCareProject.utility.exception.InternalServerError;
+import com.kamikarow.hairCareProject.utility.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +31,9 @@ public class  AuthenticationService implements AuthInterface {
     public String register(User registerRequest) {
 
         var user = new RegisterRequest().formatUser(registerRequest, encodePassword(registerRequest.getPassword()));
+        if(!findBy(user.getEmail()).isEmpty()){
+            throw new ConflictException("REGISTER IS NOT POSSIBLE");
+        }
         user = save(user);
         save(new AccountCustomization(user));
 
@@ -35,28 +41,32 @@ public class  AuthenticationService implements AuthInterface {
     }
     public String authenticate(User authenticationRequest) {
         authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
-        var user = findBy(authenticationRequest.getEmail())
-                .orElseThrow();
-        return generateToken(user);
+        var user = findBy(authenticationRequest.getEmail());
+        if(user.isEmpty()){
+            throw new ConflictException("AUTHENTICATION FAILED");
+        }
+        return generateToken(user.get());
     }
     public AuthenticationResponse resetPassword(ResetPasswordRequest resetPasswordRequest, String token) {
 
         if(token == null || token.isEmpty() || resetPasswordRequest.getOldPassword()==null || resetPasswordRequest.getOldPassword().isEmpty() || resetPasswordRequest.getNewPassword()==null  || resetPasswordRequest.getNewPassword().isEmpty()){
-            throw new Unauthorized("Request unauthorized");
+            throw new BadRequestException("RESET PASSWORD FAILED");
         }
         String email = extractEmail(token);
 
        if(!authenticate(new UsernamePasswordAuthenticationToken(email, resetPasswordRequest.getOldPassword())).isAuthenticated()) {
-           throw new Unauthorized("Request unauthorized");
+           throw new UnauthorizedException("RESET PASSWORD UNAUTHORIZED");
        }
-
 
         User user = new ResetPasswordRequest().toUser(findBy(email), encodePassword(resetPasswordRequest.getNewPassword()), email);
         resetPassword(user.getId(), user.getPassword());
 
         var jwtToken = generateToken(user);
-        return buildToken(jwtToken);
 
+        if(jwtToken.isEmpty()){
+            throw new InternalServerError("SERVER ERROR  GENERATE TOKEN");
+        }
+        return buildToken(jwtToken);
     }
 
     /****         Utils methods         **/
@@ -89,8 +99,7 @@ public class  AuthenticationService implements AuthInterface {
     }
 
     private Authentication authenticate(UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken){
-        return authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-
+        return authenticationManager.authenticate(usernamePasswordAuthenticationToken); //Overide default exception raised
     }
 
 }

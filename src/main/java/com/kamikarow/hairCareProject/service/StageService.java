@@ -8,6 +8,8 @@ import com.kamikarow.hairCareProject.domain.stage.StageInterface;
 import com.kamikarow.hairCareProject.infra.RoutineDao;
 import com.kamikarow.hairCareProject.infra.StageDao;
 import com.kamikarow.hairCareProject.infra.UserDao;
+import com.kamikarow.hairCareProject.utility.exception.AccessRightsException;
+import com.kamikarow.hairCareProject.utility.exception.RessourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +37,7 @@ public class StageService implements StageInterface {
             stage.setRoutine(routine);
             return  save(stage);
         }else{
-            return null;
+            throw new AccessRightsException("The client does not have access rights to the content");
         }
     }
     @Override
@@ -50,7 +52,7 @@ public class StageService implements StageInterface {
                 stage.setRoutine(routine);
                 return  updateStage(stage);
             }else{
-                return null;
+                throw new AccessRightsException("The client does not have access rights to the content");
             }
     }
     @Override
@@ -58,6 +60,8 @@ public class StageService implements StageInterface {
         User createdBy = findUserByStageId(stageId);
         if(getProfil(token) == createdBy){
             deleteStageByStageID(stageId);
+        }else{
+            throw new AccessRightsException("The client does not have access rights to the content");
         }
     }
 
@@ -65,7 +69,7 @@ public class StageService implements StageInterface {
 
     private boolean isOwner(User a, User b){
         return a == b;
-    } //todo replace by natif  equals method
+    } //todo replace by natif  equals method based on email
     private Stage save(Stage stage) { //todo : changer la visibilité du package
         return  stageDao.save(stage);
     }
@@ -73,10 +77,17 @@ public class StageService implements StageInterface {
         return  stageDao.update(stage);
     }
     private  Routine findRoutineBy(Long routineId){
-        return routineService.findBy(routineId);
+        Routine routine = routineService.findBy(routineId);
+        if(routine==null)
+            throw new RessourceNotFoundException("Cannot find the requested resource"); //
+        return routine;
     }
     private Stage findStageByStageId (Long stageId){
-        return stageDao.findBy(stageId);
+
+        Stage stage = stageDao.findBy(stageId);
+        if(stage==null)
+            throw new RessourceNotFoundException("Cannot find the requested resource"); //
+        return stage;
     }
     private User findUserByStageId(Long id)  {
         return findStageByStageId(id).getRoutine().getCreatedBy();

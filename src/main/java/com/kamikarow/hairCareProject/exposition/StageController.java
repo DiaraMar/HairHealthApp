@@ -5,6 +5,8 @@ import com.kamikarow.hairCareProject.exposition.DTO.StageResponse;
 import com.kamikarow.hairCareProject.service.StageService;
 import com.kamikarow.hairCareProject.utility.BearerTokenWrapper;
 
+import com.kamikarow.hairCareProject.utility.exception.AccessRightsException;
+import com.kamikarow.hairCareProject.utility.exception.UnauthorizedException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +36,8 @@ public class StageController {
             Long id = requestBody.get("id");
             deleteStageBy(id);
             return new ResponseEntity(HttpStatus.OK);
+        }catch(AccessRightsException accessRightsException){
+            throw accessRightsException;
         }catch(Exception e){
             throw new Exception(e);
         }
@@ -46,6 +50,8 @@ public class StageController {
                 deleteStageBy(id);
             }
             return new ResponseEntity(HttpStatus.OK);
+        }catch(AccessRightsException accessRightsException){
+            throw accessRightsException;
         }catch(Exception e){
             throw new Exception(e);
         }
@@ -55,16 +61,21 @@ public class StageController {
     public ResponseEntity<StageResponse> addStage(@RequestBody StageRequest stageRequest) throws Exception {
         try{
             return new ResponseEntity<>(new StageResponse().toStageResponse(this.service.createStage(stageRequest.toStage(), stageRequest.getRoutineId(), getToken())),HttpStatus.OK);
+        }catch(AccessRightsException accessRightsException){
+            throw accessRightsException;
         }catch(Exception e){
             throw new Exception(e);
         }
     }
 
-    @PatchMapping //todo add validator
+    @PatchMapping
     public ResponseEntity<StageResponse> update(@Valid @RequestBody StageResponse stageResponse)throws Exception {
         try{
             return new ResponseEntity<>(new StageResponse().toStageResponse(this.service.update(stageResponse.toStage(), getToken())),HttpStatus.OK);
-        }catch(Exception e){
+        }catch(AccessRightsException accessRightsException){
+            throw accessRightsException;
+        }
+        catch(Exception e){
             throw new Exception(e);
         }
     }
@@ -74,13 +85,12 @@ public class StageController {
     private void deleteStageBy(Long id) throws Exception{
         this.service.delete(id, getToken());
     }
-    private String getToken () throws Exception {
-        try{
-            return tokenWrapper.getToken();
-        }
-        catch (Exception e){
-            throw new Exception(e);
-        }
+    private String getToken () {
+        String token =  tokenWrapper.getToken();
+
+        if(token.isEmpty())
+            throw new UnauthorizedException("");
+        return token;
     }
 
 }

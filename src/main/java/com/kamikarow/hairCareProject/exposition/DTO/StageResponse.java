@@ -21,6 +21,7 @@ public class StageResponse {
 
     @Min(1) /** @Min(1) ensure it's a not null value and it's a positive value*/
     private Long id;
+    @NotBlank
     private String title;
     private String description;
     private LocalDateTime createdOn;

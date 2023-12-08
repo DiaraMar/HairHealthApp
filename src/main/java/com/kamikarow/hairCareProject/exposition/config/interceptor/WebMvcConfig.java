@@ -16,13 +16,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // register the interceptor
         registry.addInterceptor(bearerTokenInterceptor());
-        // you can exclude certain URL patterns here, for example
-        // .excludePathPatterns("/health")
     }
-
-    // the 2 methods below produces the bean for token wrapper and interceptor in request scope
 
     @Bean
     public BearerTokenInterceptor bearerTokenInterceptor() {

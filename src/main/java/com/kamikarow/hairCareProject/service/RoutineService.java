@@ -7,6 +7,8 @@ import com.kamikarow.hairCareProject.exposition.config.JwtService;
 import com.kamikarow.hairCareProject.infra.RoutineDao;
 import com.kamikarow.hairCareProject.domain.stage.Stage;
 import com.kamikarow.hairCareProject.infra.StageDao;
+import com.kamikarow.hairCareProject.utility.exception.RessourceNotFoundException;
+import com.kamikarow.hairCareProject.utility.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,6 @@ public class RoutineService implements RoutineInterface {
 
     @Override
     public Routine createRoutine(Routine routine, String token) {
-
         routine.setCreatedBy(getUser(token).get());
         routine.setCreatedOn(LocalDateTime.now());
         List<Stage> stages = routine.getStages();
@@ -41,13 +42,15 @@ public class RoutineService implements RoutineInterface {
         routine.setStages(null);
         Routine routineSaved = save(routine);
 
-        for (Stage stage : stages){
-            stage.setRoutine(routineSaved);
-            stage.setCreatedOn(LocalDateTime.now());
-            stagesSaved.add(save(stage));
+        if(stages!=null){
+            for (Stage stage : stages){
+                stage.setRoutine(routineSaved);
+                stage.setCreatedOn(LocalDateTime.now());
+                stagesSaved.add(save(stage));
+            }
+            routineSaved.setStages(stagesSaved);
         }
 
-        routineSaved.setStages(stagesSaved);
         return routineSaved;
     }
 
@@ -59,23 +62,28 @@ public class RoutineService implements RoutineInterface {
 
     @Override
     public Routine updateRoutine(Routine routine, String token) {
-        User authenticatedUser = getUser(token).get();
-        if(findBy(routine.getId()).getCreatedBy()== authenticatedUser){
+        Optional<User> authenticatedUser = getUser(token);
+
+        if(findBy(routine.getId()).getCreatedBy()== authenticatedUser.get()){
+
             for (Stage stage : routine.getStages()){
-                stage.setRoutine(routine);
+                stage.setRoutine(routine);  //todo stage useless
             }
-            routine.setCreatedBy(authenticatedUser);
-            update(routine);
+            routine.setCreatedBy(authenticatedUser.get());
+            routine = update(routine);
         }
             
-            return null;
-    } //todo implement
+            return routine;
+    }
 
     @Override
     public void deleteRoutine(Long id, String token) {
         if(findBy(id).getCreatedBy()== getUser(token).get()){
             deleteRoutineByRoutineId(id);
-        }//todo : throw error if else
+        }
+        else{
+            throw new UnauthorizedException("Unhautorized");
+        }
     }
     @Override
     public void deleteStageOfRoutine(Long routineId) {
@@ -90,7 +98,12 @@ public class RoutineService implements RoutineInterface {
         return this.jwtService.extractUsername(token);
     }
     private Optional<User> getUser(String token){
-        return this.userService.findBy(getEmail(token));
+
+        Optional<User> user = this.userService.findBy(getEmail(token));
+        if(user.isEmpty())
+            throw new UnauthorizedException("The client must authenticate itself to perform request");
+
+        return user;
     }
 
     private Routine save(Routine routine){
@@ -101,8 +114,8 @@ public class RoutineService implements RoutineInterface {
         return this.stageDao.save(stage);
     }
 
-    private void update(Routine routine){
-        this.routineDao.update(routine);
+    private Routine update(Routine routine){
+        return this.routineDao.update(routine);
 
     }
     private List<Routine> retrieveAllBy(Long userId){
@@ -122,7 +135,10 @@ public class RoutineService implements RoutineInterface {
     }
 
     public Routine findBy(Long routineId){
-        return routineDao.findBy(routineId).orElseThrow();
+        Optional<Routine> routine = routineDao.findBy(routineId);
+        if(routine.isEmpty())
+            throw new RessourceNotFoundException("Cannot find the requested resource");
+        return routine.get();
     }
 
 }

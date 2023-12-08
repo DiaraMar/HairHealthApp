@@ -4,6 +4,7 @@ import com.kamikarow.hairCareProject.exposition.DTO.RoutineRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.RoutineResponse;
 import com.kamikarow.hairCareProject.service.RoutineService;
 import com.kamikarow.hairCareProject.utility.BearerTokenWrapper;
+import com.kamikarow.hairCareProject.utility.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,14 +22,14 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:4200")
 public class RoutineController {
 
-    private static final Logger logger = LogManager.getLogger(RoutineController.class);
+    //private static final Logger logger = LogManager.getLogger(RoutineController.class);
     private final RoutineService routineService;
 
     private final BearerTokenWrapper tokenWrapper;
     @PostMapping
-    public ResponseEntity<Optional<RoutineResponse>> saveRoutine(@RequestBody RoutineRequest routine) throws Exception {
+    public ResponseEntity<Optional<RoutineResponse>> saveRoutine(@RequestBody RoutineRequest routineRequest) throws Exception {
         try{
-            return ResponseEntity.ok(Optional.ofNullable(new RoutineResponse().toRoutineResponse(createRoutine(routine.toRoutine()))));
+            return ResponseEntity.ok(Optional.ofNullable(new RoutineResponse().toRoutineResponse(createRoutine(routineRequest.toRoutine()))));
         }catch(Exception e){
             throw new Exception(e);
         }
@@ -46,7 +47,6 @@ public class RoutineController {
     @GetMapping
     public ResponseEntity<List<RoutineResponse>> retrieveAllRoutine() throws Exception {
         try{
-            String token = getToken ();
             return ResponseEntity.ok(new RoutineResponse().toRoutineResponses(retrieveAll()));
         }catch(Exception e){
             throw new Exception(e);
@@ -55,10 +55,13 @@ public class RoutineController {
 
     @PostMapping("/delete")
     public ResponseEntity deleteRoutine(@RequestBody Map<String, Long> requestBody) throws Exception {
+
         try{
             Long id = requestBody.get("id");
             deleteRoutineById(id);
             return new ResponseEntity(HttpStatus.OK);
+        }catch (UnauthorizedException unauthorizedException) {
+            throw  unauthorizedException;
         }catch(Exception e){
             throw new Exception(e);
         }
@@ -71,7 +74,9 @@ public class RoutineController {
                 deleteRoutineById(id);
             }
             return new ResponseEntity(HttpStatus.OK);
-        }catch(Exception e){
+        }catch (UnauthorizedException unauthorizedException) {
+            throw  unauthorizedException;}
+        catch(Exception e){
             throw new Exception(e);
         }
     }
@@ -96,13 +101,12 @@ public class RoutineController {
 
 
 
-    private String getToken () throws Exception {
-        try{
-            return tokenWrapper.getToken();
-        }
-        catch (Exception e){
-            throw new Exception(e);
-        }
+    private String getToken () {
+        String token =  tokenWrapper.getToken();
+
+        if(token.isEmpty())
+            throw new UnauthorizedException("");
+        return token;
     }
 
 }

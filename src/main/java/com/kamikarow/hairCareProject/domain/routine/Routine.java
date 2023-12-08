@@ -24,6 +24,7 @@ public class Routine {
     private Long id;
 
     private String title;
+    @Column(length = 2000)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,7 +1,6 @@
 package com.kamikarow.hairCareProject.exposition.DTO;
 
 import com.kamikarow.hairCareProject.domain.routine.Routine;
-import com.kamikarow.hairCareProject.domain.stage.Stage;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +20,7 @@ public class RoutineRequest {
     private String title;
     @NotBlank
     private String description;
-    private List<StageRequest> stages = new ArrayList<>(); // todo refactor rename stageRequests
+    private List<StageRequest> stages = new ArrayList<>();
 
     public Routine toRoutine(){
         return Routine.builder()

@@ -2,7 +2,6 @@ package com.kamikarow.hairCareProject.exposition.DTO;
 
 import com.kamikarow.hairCareProject.domain.comment.Comment;
 import com.kamikarow.hairCareProject.domain.routine.Routine;
-import com.kamikarow.hairCareProject.domain.stage.Stage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +29,7 @@ public class RoutineResponse {
 
 
     public RoutineResponse toRoutineResponse(Routine routine){
-        RoutineResponse y = RoutineResponse.builder()
+        RoutineResponse routineResponse = RoutineResponse.builder()
                 .id(routine.getId())
                 .title(routine.getTitle())
                 .description(routine.getDescription())
@@ -41,7 +40,7 @@ public class RoutineResponse {
                 .isVisible(routine.isVisible())
                 .isFavorite(routine.isFavorite())
                 .build();
-        return y;
+        return routineResponse;
     }
 
     public List<RoutineResponse> toRoutineResponses(List<Routine> routines){
@@ -53,8 +52,7 @@ public class RoutineResponse {
     }
 
     public Routine toRoutine(RoutineResponse routineResponse){
-        System.out.println(routineResponse + "debuggggggg 1");
-        Routine r = Routine.builder()
+        Routine routine = Routine.builder()
                 .id(routineResponse.getId())
                 .title(routineResponse.getTitle())
                 .description(routineResponse.getDescription())
@@ -64,10 +62,7 @@ public class RoutineResponse {
                 .isVisible(routineResponse.isVisible())
                 .isFavorite(routineResponse.isFavorite())
                 .build();
-
-        System.out.println(r + "debuggggggg  2");
-
-        return r;
+        return routine;
     }
 
 }
