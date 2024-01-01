@@ -1,6 +1,7 @@
 package com.kamikarow.hairCareProject.service;
 
 import com.kamikarow.hairCareProject.domain.user.User;
+import com.kamikarow.hairCareProject.exposition.DTO.CompleteAccountCustomizationRequest;
 import com.kamikarow.hairCareProject.exposition.config.JwtService;
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomizationInterface;
@@ -70,8 +71,14 @@ public class AccountCustomizationService implements AccountCustomizationInterfac
 
     private User getUser (String token){
         String email = getEmail(token);
+        return getUserByEmail(email);
+    }
+
+    private User getUserByEmail(String email) {
         return userService.findBy(email).get();
     }
+
+
     private Long getUserId (String token){
         return getUser(token).getId();
     }
@@ -95,4 +102,25 @@ public class AccountCustomizationService implements AccountCustomizationInterfac
         accountCustomizationDao.save(accountCustomization);
     }
 
+    public AccountCustomization updateAccountCustomization(CompleteAccountCustomizationRequest completeAccountCustomizationRequest) throws Exception {
+
+        Long userId = getUserByEmail(completeAccountCustomizationRequest.getUsername()).getId();
+        if(userId<1)
+            throw new UnauthorizedException("The client does not exist");
+
+        Optional<AccountCustomization> accountCustomizationInDatabase = getAccountCustomization(userId);
+        if(accountCustomizationInDatabase.isEmpty())
+            throw new RessourceNotFoundException("Cannot find the requested resource"); //todo overide by this one
+
+        if(!comparing(accountCustomizationInDatabase.get().isSms(),completeAccountCustomizationRequest.isSms())){
+            updateSmsPreference(userId, completeAccountCustomizationRequest.isSms());
+            accountCustomizationInDatabase.get().setSms(completeAccountCustomizationRequest.isSms());
+        }
+        if(!comparing(accountCustomizationInDatabase.get().isNewsletter(),completeAccountCustomizationRequest.isNewsletter())){
+            updateNewsLetterPreference(userId, completeAccountCustomizationRequest.isNewsletter());
+            accountCustomizationInDatabase.get().setNewsletter(completeAccountCustomizationRequest.isNewsletter());
+        }
+
+        return new AccountCustomization().toAccountCustomization(accountCustomizationInDatabase);
+    }
 }

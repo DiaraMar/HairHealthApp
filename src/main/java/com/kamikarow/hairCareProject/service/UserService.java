@@ -9,6 +9,7 @@ import com.kamikarow.hairCareProject.utility.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +27,11 @@ public class UserService implements UserInterface {
         throw new UnauthorizedException("The client must authenticate itself to get the requested response");
 
         return getProfil(email);
+    }
+
+    @Override
+    public Optional<User> getUserProfilByUsername(String username) {
+        return this.getProfil(username);
     }
 
     @Override
@@ -66,6 +72,42 @@ public class UserService implements UserInterface {
         return userInDatabase.get();
     }
 
+    public User updateUserProfil(User user) {
+
+        String email = user.getEmail();
+
+
+        Optional<User> userInDatabase = findBy(email);
+        User updateUser = new UserResponse().toUser(userInDatabase,user);
+
+        if(!userInDatabase.get().getFirstname().equals(updateUser.getFirstname()) && !updateUser.getFirstname().isEmpty()){
+            updateFirstname(userInDatabase.get().getId(), updateUser.getFirstname());
+            userInDatabase.get().setFirstname(updateUser.getFirstname());
+        }
+
+        if(!userInDatabase.get().getLastname().equals(updateUser.getLastname()) && !updateUser.getLastname().isEmpty()){
+            updateLastname(userInDatabase.get().getId(), updateUser.getLastname());
+            userInDatabase.get().setLastname(updateUser.getLastname());
+        }
+
+        //todo : fix. update works one time only
+        if(!userInDatabase.get().getEmail().equals(updateUser.getEmail()) && !updateUser.getEmail().isEmpty()) {
+            updateEmail(userInDatabase.get().getId(), updateUser.getEmail());
+            userInDatabase.get().setEmail(updateUser.getEmail());
+        }
+
+        if(!userInDatabase.get().getPhoneNumber().equals(updateUser.getPhoneNumber()) && !updateUser.getPhoneNumber().isEmpty()) {
+            updatePhoneNumber(userInDatabase.get().getId(), updateUser.getPhoneNumber());
+            userInDatabase.get().setPhoneNumber(updateUser.getPhoneNumber());
+        }
+
+        return userInDatabase.get();
+    }
+
+    public List<User> getAllUser(){
+        return this.userDao.getAllProfil();
+    }
+
     /****         Utils methods         **/
 
 
@@ -99,4 +141,7 @@ public class UserService implements UserInterface {
         return userDao.getUserProfil(email);
     }
 
+    public void delete(String email) {
+        this.userDao.delete(email);
+    }
 }

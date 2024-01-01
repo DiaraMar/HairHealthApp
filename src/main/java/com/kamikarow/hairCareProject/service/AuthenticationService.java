@@ -87,6 +87,9 @@ public class  AuthenticationService implements AuthInterface {
     private void save(AccountCustomization accountCustomization){
         accountCustomizationService.save(accountCustomization);
     }
+    public void delete(String email){
+        this.userService.delete(email);
+    }
 
     private String encodePassword(String password){
         return passwordEncoder.encode(password);

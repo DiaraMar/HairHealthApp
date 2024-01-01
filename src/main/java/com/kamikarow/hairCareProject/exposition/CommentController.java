@@ -6,15 +6,12 @@ import com.kamikarow.hairCareProject.exposition.DTO.CommentResponse;
 import com.kamikarow.hairCareProject.service.CommentService;
 import com.kamikarow.hairCareProject.utility.BearerTokenWrapper;
 import com.kamikarow.hairCareProject.utility.exception.*;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/comments")

@@ -3,6 +3,7 @@ package com.kamikarow.hairCareProject.exposition;
 
 import com.kamikarow.hairCareProject.domain.accountCustomization.AccountCustomization;
 import com.kamikarow.hairCareProject.exposition.DTO.AccountCustomizationResponse;
+import com.kamikarow.hairCareProject.exposition.DTO.CompleteAccountCustomizationRequest;
 import com.kamikarow.hairCareProject.service.AccountCustomizationService;
 import com.kamikarow.hairCareProject.utility.BearerTokenWrapper;
 import com.kamikarow.hairCareProject.utility.exception.RessourceNotFoundException;
@@ -49,6 +50,17 @@ public class AccountCustomizationController {
             throw e;
         }
     }
+    @PatchMapping("/pilote")
+    public ResponseEntity<Optional<AccountCustomizationResponse>> updateAccountSuper(@RequestBody CompleteAccountCustomizationRequest completeAccountCustomizationRequest) throws Exception {
+        try{
+            return ResponseEntity.ok(Optional.ofNullable(new AccountCustomizationResponse().toAccountCustomizationResponse(updateAccountCustomization(completeAccountCustomizationRequest))));
+        }catch(UnauthorizedException | RessourceNotFoundException e){
+            //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw e;
+        } catch(Exception e){
+            throw e;
+        }
+    }
 
     /** Utils Methods **/
 
@@ -57,6 +69,9 @@ public class AccountCustomizationController {
     }
     private AccountCustomization updateAccountCustomization(String token, AccountCustomization accountCustomizationResponse) throws Exception {
         return this.accountCustomizationService.updateAccountCustomization(token, accountCustomizationResponse);
+    }
+    private AccountCustomization updateAccountCustomization(CompleteAccountCustomizationRequest completeAccountCustomizationRequest) throws Exception {
+        return this.accountCustomizationService.updateAccountCustomization(completeAccountCustomizationRequest);
     }
 
     private String getToken () {

@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,10 +22,19 @@ public class UserDao {
     }
 
 
+    public void delete(String email){
+        this.userJpaRepository.deleteById(findBy(email).get().getId());
+    }
     public Optional<User> getUserProfil(String email){
         Optional<User> user = findBy(email);
         return user;
 
+    }
+
+
+
+    public List<User> getAllProfil(){
+        return userJpaRepository.findAll();
     }
 
     @Transactional

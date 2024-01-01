@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Data
@@ -37,6 +39,13 @@ public class UserResponse {
                 .build();
     }
 
+    public List<Optional<UserResponse>> toUserResponseDtoList(List<User> users){
+        List<Optional<UserResponse>> usersResponses = new ArrayList<>();
+        for(User user : users){
+            usersResponses.add(Optional.ofNullable(toUserDTO(user)));
+       }
+        return usersResponses;
+    }
     public User toUser(){
       return   User.builder()
               .firstname(firstname)

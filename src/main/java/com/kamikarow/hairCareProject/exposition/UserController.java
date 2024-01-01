@@ -1,8 +1,6 @@
 package com.kamikarow.hairCareProject.exposition;
 
-import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationResponse;
-import com.kamikarow.hairCareProject.exposition.DTO.ResetPasswordRequest;
-import com.kamikarow.hairCareProject.exposition.DTO.UserResponse;
+import com.kamikarow.hairCareProject.exposition.DTO.*;
 import com.kamikarow.hairCareProject.service.AuthenticationService;
 import com.kamikarow.hairCareProject.service.LogoutService;
 import com.kamikarow.hairCareProject.service.UserService;
@@ -21,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -54,6 +54,9 @@ public class UserController {
         logoutService.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
     }
 
+
+
+
     @GetMapping("/profil")
     public ResponseEntity<Optional<UserResponse>> getUserProfil() throws Exception {
         try{
@@ -77,6 +80,42 @@ public class UserController {
         }
     }
 
+    @GetMapping("/pilote/profil/all")//
+    public ResponseEntity<List<Optional<UserResponse>>> getAllUser() throws Exception {
+        try{
+            return ResponseEntity.ok(new UserResponse().toUserResponseDtoList(userService.getAllUser()));
+        }catch(UnauthorizedException unauthorizedException){
+            throw unauthorizedException;
+        }
+        catch (Exception e){
+            throw e;
+        }
+    }
+
+    @PatchMapping("/pilote/profil") //todo admin
+    public ResponseEntity<UserResponse> updateUserProfilSuper(@RequestBody UserResponse updatedProfil) throws Exception {
+        try{
+            return ResponseEntity.ok(new UserResponse().toUserDTO(userService.updateUserProfil(updatedProfil.toUser())));
+        }catch(UnauthorizedException unauthorizedException){
+            throw unauthorizedException;
+        }catch (Exception e){
+            throw e;
+        }
+    }
+    @GetMapping("/pilote/profil") //todo admin
+    public ResponseEntity<Optional<CompleteUserResponse>> getUserProfilSuper(@RequestBody CompleteUserRequest completeUserRequest) throws Exception {
+        try{
+            return ResponseEntity.ok(Optional.ofNullable(new CompleteUserResponse().toCompleteUserResponseDTO(userService.getUserProfilByUsername(completeUserRequest.getEmail()))));
+        }catch(UnauthorizedException unauthorizedException){
+            throw unauthorizedException;
+        }
+        catch (Exception e){
+            throw e;
+        }
+    }
+
+
+
     private String getToken () {
         String token =  tokenWrapper.getToken();
 
@@ -84,6 +123,7 @@ public class UserController {
             throw new UnauthorizedException("");
         return token;
     }
+
 
 
 }

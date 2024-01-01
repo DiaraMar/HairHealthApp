@@ -3,6 +3,7 @@ package com.kamikarow.hairCareProject.exposition;
 import com.kamikarow.hairCareProject.domain.user.User;
 import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.AuthenticationResponse;
+import com.kamikarow.hairCareProject.exposition.DTO.CompleteUserRequest;
 import com.kamikarow.hairCareProject.exposition.DTO.RegisterRequest;
 import com.kamikarow.hairCareProject.service.AuthenticationService;
 import com.kamikarow.hairCareProject.utility.exception.ConflictException;
@@ -47,6 +48,19 @@ public class AuthenticationController {
         }
     }
 
+    @PostMapping("/pilote/delete") //todo admin
+    public ResponseEntity deleteUser( @RequestBody CompleteUserRequest completeUserRequest) throws AccessRightsException {
+        try{
+            this.authenticationService.delete(completeUserRequest.getEmail());
+            return (ResponseEntity) ResponseEntity.ok( );
+        }
+        catch (ConflictException conflictException){
+            throw conflictException;
+        } catch (Exception e){
+            throw e;
+        }
+    }
+
     /** Utils Methods **/
 
 
@@ -57,5 +71,8 @@ public class AuthenticationController {
     private String register(User register) throws ConflictException {
         return authenticationService.register(register);
     }
-
+    private void delete(String email) throws ConflictException {
+        authenticationService.delete(email);
     }
+
+}

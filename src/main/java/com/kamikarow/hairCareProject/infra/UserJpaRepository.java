@@ -6,13 +6,18 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserJpaRepository extends JpaRepository<User,Long> {
 
     Optional<User>findByEmail(String email);
 
+    @Override
+    Optional<User> findById(Long aLong);
 
+    @Override
+    List<User> findAll();
 
     @Modifying
     @Query(value = "UPDATE kkarowdb._user SET firstname = :firstname WHERE id = :id", nativeQuery = true)

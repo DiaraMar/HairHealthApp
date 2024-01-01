@@ -38,6 +38,7 @@ public class RoutineController {
     @PatchMapping
     public ResponseEntity<Optional<RoutineResponse>> update(@RequestBody RoutineResponse routineResponse) throws Exception {
         try{
+            System.out.println("tesssssssssssssssssssssssssssssssssst");
             return ResponseEntity.ok(Optional.ofNullable(new RoutineResponse().toRoutineResponse(updateRoutine(new RoutineResponse().toRoutine(routineResponse)))));
         }catch(Exception e){
             throw new Exception(e);
