@@ -1,5 +1,6 @@
 package com.kamikarow.hairCareProject.exposition.DTO;
 
+import com.kamikarow.hairCareProject.domain.user.Role;
 import com.kamikarow.hairCareProject.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class UserResponse {
     private String lastname;
     private String email;
     private String phoneNumber;
+    private Role role;
 
     public UserResponse toUserDTO(Optional<User> optionalUser){
         var user = optionalUser.get();
@@ -28,6 +30,7 @@ public class UserResponse {
                 .lastname(user.getLastname())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole())
                 .build();
     }
     public UserResponse toUserDTO(User user){
@@ -36,6 +39,7 @@ public class UserResponse {
                 .lastname(user.getLastname())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole())
                 .build();
     }
 
@@ -52,6 +56,7 @@ public class UserResponse {
               .lastname(lastname)
               .email(email)
               .phoneNumber(phoneNumber)
+              .role(role)
               .build();
     }
     public User toUser(Optional<User> optionalUser, User updatedUser){

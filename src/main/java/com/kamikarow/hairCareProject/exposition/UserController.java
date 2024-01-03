@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -80,7 +81,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("/pilote/profil/all")//
+    @GetMapping("/pilote/profil/all")
+    @PreAuthorize("hasRole('ADMIN')")
+
     public ResponseEntity<List<Optional<UserResponse>>> getAllUser() throws Exception {
         try{
             return ResponseEntity.ok(new UserResponse().toUserResponseDtoList(userService.getAllUser()));
@@ -93,6 +96,8 @@ public class UserController {
     }
 
     @PatchMapping("/pilote/profil") //todo admin
+    @PreAuthorize("hasRole('ADMIN')")
+
     public ResponseEntity<UserResponse> updateUserProfilSuper(@RequestBody UserResponse updatedProfil) throws Exception {
         try{
             return ResponseEntity.ok(new UserResponse().toUserDTO(userService.updateUserProfil(updatedProfil.toUser())));
@@ -103,6 +108,8 @@ public class UserController {
         }
     }
     @GetMapping("/pilote/profil") //todo admin
+    @PreAuthorize("hasRole('ADMIN')")
+
     public ResponseEntity<Optional<CompleteUserResponse>> getUserProfilSuper(@RequestBody CompleteUserRequest completeUserRequest) throws Exception {
         try{
             return ResponseEntity.ok(Optional.ofNullable(new CompleteUserResponse().toCompleteUserResponseDTO(userService.getUserProfilByUsername(completeUserRequest.getEmail()))));

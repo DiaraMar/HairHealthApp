@@ -3,6 +3,7 @@ package com.kamikarow.hairCareProject.exposition.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,11 +38,25 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/comments/**").permitAll()
                 .requestMatchers("/api/v1/stages/**").permitAll()
                 .requestMatchers("/api/v1/routines/**").permitAll()
+
+
                 .requestMatchers("/api/v1/diagnostics/**").permitAll()
+
+
                 .requestMatchers("/api/v1/files/**").permitAll()
+
+                .requestMatchers(HttpMethod.PATCH, "/api/v1/accountExperience/pilote").hasRole("ADMIN")
                 .requestMatchers("/api/v1/accountExperience/**").permitAll()
+
                 .requestMatchers("/api/v1/auth/**").permitAll()
+
+                .requestMatchers(HttpMethod.PATCH,"/api/v1/me/pilote/profil").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/api/v1/me/pilote/profil").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/api/v1/me//pilote/profil/all").hasRole("ADMIN")
+
                 .requestMatchers("/api/v1/me/**").permitAll()
+
+
                 .requestMatchers("/api/v1/demo-controller/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

@@ -27,6 +27,7 @@ public class CompleteUserResponse {
     private String email;
     private String phoneNumber;
 
+
     private AccountCustomization accountCustomization;
 
     private List<Diagnostic> diagnostics;

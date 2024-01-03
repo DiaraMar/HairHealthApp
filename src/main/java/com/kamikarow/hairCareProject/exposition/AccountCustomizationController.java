@@ -11,6 +11,7 @@ import com.kamikarow.hairCareProject.utility.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -51,6 +52,7 @@ public class AccountCustomizationController {
         }
     }
     @PatchMapping("/pilote")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Optional<AccountCustomizationResponse>> updateAccountSuper(@RequestBody CompleteAccountCustomizationRequest completeAccountCustomizationRequest) throws Exception {
         try{
             return ResponseEntity.ok(Optional.ofNullable(new AccountCustomizationResponse().toAccountCustomizationResponse(updateAccountCustomization(completeAccountCustomizationRequest))));
